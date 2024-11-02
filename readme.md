@@ -1,108 +1,86 @@
-# Automata Processing Backend
+# Automaton Simulator Backend
 
-A Node.js backend service for processing and validating Deterministic Finite Automata (DFA) and Non-deterministic Finite Automata (NFA).
+A backend service for processing and validating finite automata.
 
-## Features
+## Quick Start for Collaborators
 
-- Process DFA inputs and determine acceptance
-- Process NFA inputs and determine acceptance
-- Validate DFA configurations
-- RESTful API endpoints for automata operations
-- MongoDB integration for data persistence
+### Setting Up the Repository
 
-## Prerequisites
-
-- Node.js (v14 or higher recommended)
-- MongoDB
-- npm or yarn package manager
-
-## Installation
-
-1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd <project-directory>
+git remote add origin https://github.com/HusPhil/automaton-simulator-backend.git
+git pull origin master
 ```
 
-2. Install dependencies:
+### Running the Server Locally
 ```bash
 npm install
-```
-
-3. Create a `.env` file in the root directory with the following content:
-```
-DB_URL=mongodb://your-mongodb-connection-string
-```
-
-4. Start the development server:
-```bash
 npm run devStart
 ```
 
-The server will start on port 3000 by default.
+## Frontend Integration Example
 
-## API Endpoints
+Here's an example of how to integrate with a React frontend:
 
-### Test Route
-- `GET /test` - Test if the API is working
+```typescript
+async function processAutomaton(): Promise<void> {
+    // testCase: input string to process
+    // currMode: 'DFA' or 'NFA'
+    // nodes: array of automaton states
+    // edges: array of transitions
+    
+    try {
+        const response = await axios.get(
+            `http://localhost:3000/automata/process_${currMode.toUpperCase()}`, 
+            {
+                params: {
+                    nodes,
+                    edges,
+                    testCase: localData,
+                }
+            }
+        );
 
-### Automata Routes
-- `GET /automata` - Test if automata processing route is working
-- `GET /automata/process_DFA` - Process input string using DFA
-- `GET /automata/process_NFA` - Process input string using NFA
-- `GET /automata/validate_DFA` - Validate DFA configuration
+        // Update state with automaton processing results
+        setAutomatonResult({
+            result: response.data.result,        // boolean: whether input is accepted
+            statePath: response.data.statePath,  // array: path of states traversed
+            isValid: response.data.isValid,      // boolean: whether automaton is valid
+            acceptStates: response.data.acceptStates  // array: final/accepting states
+        });
 
-### Request Parameters
-
-For processing endpoints (`/process_DFA`, `/process_NFA`):
-- `nodes`: Array of automaton states
-- `edges`: Array of transitions
-- `testCase`: Input string to process
-
-For validation endpoint (`/validate_DFA`):
-- `nodes`: Array of automaton states
-- `edges`: Array of transitions
-
-## Project Structure
-
+        // Response data includes:
+        console.log("Input:", testCase);
+        console.log("State Path:", response.data.statePath);
+        console.log("Accepted:", response.data.result);
+        console.log("Valid Automaton:", response.data.isValid);
+        console.log(
+            response.data.acceptStates?.length <= 0 
+                ? "You did not specify any final states." 
+                : "You have specified final states."
+        );
+    } catch (error) {
+        console.error("Error processing automaton:", error);
+    }
+}
 ```
-├── server.js           # Main application entry point
-├── routes/
-│   ├── test.js        # Test routes
-│   └── automata.js    # Automata processing routes
-├── classes/
-│   ├── Automaton.js   # Base automaton class
-│   ├── DF_Automaton.js# Deterministic Finite Automaton implementation
-│   └── NF_Automaton.js# Non-deterministic Finite Automaton implementation
+
+## API Response Format
+
+The API returns a JSON object with the following structure:
+
+```typescript
+interface AutomatonResponse {
+    result: boolean;      // Whether the input string is accepted
+    statePath: string[];  // Sequence of states visited during processing
+    isValid: boolean;     // Whether the automaton configuration is valid
+    acceptStates: string[]; // List of accepting/final states
+}
 ```
-
-## Dependencies
-
-- express: Web framework
-- mongoose: MongoDB object modeling
-- cors: Cross-Origin Resource Sharing middleware
-- dotenv: Environment variable management
-- nodemon: Development server with hot reload
 
 ## Development
 
-To start the development server with hot reload:
-```bash
-npm run devStart
-```
-
-## Error Handling
-
-The application includes global error handling middleware that will catch and process any unhandled errors, returning appropriate HTTP status codes and error messages.
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+The server runs on port 3000 by default. Make sure no other service is using this port before starting the development server.
 
 ## License
 
-This project is licensed under the ISC License.
+This project is licensed under the MIT License - see the LICENSE file for details.
