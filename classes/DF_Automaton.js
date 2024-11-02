@@ -1,30 +1,9 @@
 const Automaton = require("./Automaton");
 
 class DF_Automaton extends Automaton {
-    constructor(states, edges, initialState, acceptStates) {
-        super(states, edges, initialState, acceptStates);
+    constructor(states, edges, initialState, acceptStates, alphabet) {
+        super(states, edges, initialState, acceptStates, alphabet);
         this.type = 'DFA';
-    }
-
-    validate(alphabet) {
-        let isValid = true;
-        
-        for (const state of this.states.keys()) {
-            alphabet.forEach(symbol => {
-                const expectedTransitionKey = `${state},${symbol}`;
-                if(!this.transitions.has(expectedTransitionKey)) {
-                    isValid = false;
-                }
-                else {
-                    const expectedTransitions = this.transitions.get(expectedTransitionKey);
-                    if (expectedTransitions.length !== 1) {
-                        isValid = false;
-                    }
-                }
-            });        
-        }
-
-        return isValid;
     }
 
     process(input) {
@@ -35,7 +14,6 @@ class DF_Automaton extends Automaton {
 
 
         if (input.length === 0) {
-            console.log("EMPTY INPUT: fStates:", this.acceptStates);
             return { result: this.acceptStates.has(currentState), statePath: [currentState] };
         }
 
@@ -52,13 +30,13 @@ class DF_Automaton extends Automaton {
         }
 
         result = this.acceptStates.has(currentState);
-        console.log("statePath:", statePath);
 
         return { result, statePath };
     }
 
     printDFAutomaton() {
         console.log('DFA Automaton:');
+        console.log("Is Valid:", this.validate(this.alphabet));
         super.printAutomaton();
     }
 }

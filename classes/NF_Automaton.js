@@ -1,8 +1,8 @@
 const Automaton = require("./Automaton");
 
 class NF_Automaton extends Automaton {
-    constructor(states, edges, initialState, acceptStates) {
-        super(states, edges, initialState, acceptStates);
+    constructor(states, edges, initialState, acceptStates, alphabet) {
+        super(states, edges, initialState, acceptStates, alphabet);
         this.type = 'NFA';
     }
 

@@ -1,9 +1,10 @@
 class Automaton {
-  constructor(states, edges, initialState, acceptStates) {
+  constructor(states, edges, initialState, acceptStates, alphabet) {
     this.states = states;         // Map of states
     this.transitions = edges;     // Map of transitions
     this.initialState = initialState;
     this.acceptStates = acceptStates;    // Set of accepting states
+    this.alphabet = alphabet;
   }
 
   static parseAutomaton(nodes, edges) {
@@ -35,8 +36,34 @@ class Automaton {
           }
       }
 
-      return { states, transitions, initialState, acceptStates };
+      const alphabet = new Set();
+      for (const edge of edges) {
+          alphabet.add(edge.data);  
+      }
+
+      return { states, transitions, initialState, acceptStates, alphabet };
   }
+
+  validateDFA() {
+    let isValid = true;
+    
+    for (const state of this.states.keys()) {
+        this.alphabet.forEach(symbol => {
+            const expectedTransitionKey = `${state},${symbol}`;
+            if(!this.transitions.has(expectedTransitionKey)) {
+                isValid = false;
+            }
+            else {
+                const expectedTransitions = this.transitions.get(expectedTransitionKey);
+                if (expectedTransitions.length !== 1) {
+                    isValid = false;
+                }
+            }
+        });        
+    }
+
+    return isValid;
+}
 
   // Process an input string
   process(input) {
@@ -46,6 +73,7 @@ class Automaton {
   // Print automaton details
   printAutomaton() {
     console.log('States:', Array.from(this.states.keys()));
+    console.log('Alphabet:', this.alphabet);
     console.log('Initial State:', this.initialState);
     console.log('Accept States:', Array.from(this.acceptStates));
     console.log('Transitions:');

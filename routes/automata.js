@@ -18,17 +18,10 @@ router.get("/process_DFA", (req, res) => {
     }
 
     try {
-
-        const alphabet = new Set();
-        for (const edge of edges) {
-            alphabet.add(edge.data);
-        }
-
+        const { states, transitions, initialState, acceptStates, alphabet } = Automaton.parseAutomaton(nodes, edges);
         
-        const { states, transitions, initialState, acceptStates } = Automaton.parseAutomaton(nodes, edges);
-        
-        const DFA = new DF_Automaton(states, transitions, initialState, acceptStates);
-        const isValid = DFA.validate(alphabet);
+        const DFA = new DF_Automaton(states, transitions, initialState, acceptStates, alphabet);
+        const isValid = DFA.validateDFA();
         const { result, statePath } = DFA.process(testCase);
 
 
@@ -57,15 +50,10 @@ router.get("/process_NFA", (req, res) => {
     }
 
     try {
-        const alphabet = new Set();
-        for (const edge of edges) {
-            alphabet.add(edge.data);
-        }
-        const { states, transitions, initialState, acceptStates } = Automaton.parseAutomaton(nodes, edges);
+        const { states, transitions, initialState, acceptStates, alphabet } = Automaton.parseAutomaton(nodes, edges);
 
-        const NFA = new NF_Automaton(states, transitions, initialState, acceptStates);
-        const DFA = new DF_Automaton(states, transitions, initialState, acceptStates);
-        const isValid = DFA.validate(alphabet);
+        const NFA = new NF_Automaton(states, transitions, initialState, acceptStates, alphabet);
+        const isValid = NFA.validateDFA();
         
         const { result, statePath } = NFA.process(testCase);
   
