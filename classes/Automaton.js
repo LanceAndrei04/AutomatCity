@@ -20,9 +20,20 @@ class Automaton {
 
       initialState = nodes[0].id;
 
-      const transitions = new Map(
-          edges.map(edge => [`${edge.source},${edge.data}`, edge.target])
-      );
+      const transitions = new Map();
+      
+      // Process each edge
+      for (const edge of edges) {
+          const key = `${edge.source},${edge.data}`;
+          
+          // If this transition already exists, add to the array of targets
+          if (transitions.has(key)) {
+              transitions.get(key).push(edge.target);
+          } else {
+              // Create new array with first target
+              transitions.set(key, [edge.target]);
+          }
+      }
 
       return { states, transitions, initialState, acceptStates };
   }

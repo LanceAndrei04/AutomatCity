@@ -30,7 +30,6 @@ router.get("/process_DFA", (req, res) => {
         const isValid = DFA.validate(alphabet);
         const { result, statePath } = DFA.process(testCase);
 
-        console.log("Accept States:", acceptStates);
 
         res.json({ 
             states: states,
@@ -56,14 +55,22 @@ router.get("/process_NFA", (req, res) => {
     }
 
     try {
-
+        const alphabet = new Set();
+        for (const edge of edges) {
+            alphabet.add(edge.data);
+        }
         const { states, transitions, initialState, acceptStates } = Automaton.parseAutomaton(nodes, edges);
 
         const NFA = new NF_Automaton(states, transitions, initialState, acceptStates);
+        const DFA = new DF_Automaton(states, transitions, initialState, acceptStates);
+        const isValid = DFA.validate(alphabet);
+        
         const { result, statePath } = NFA.process(testCase);
 
-        console.log("result:", result);
-        console.log("statePath:", statePath);
+        // console.log("result:", result);
+        // console.log("statePath:", statePath);
+        // console.log("isValid:", isValid);
+        // console.log("transitions:", transitions);
   
         res.json({ 
             states: states,
@@ -71,7 +78,8 @@ router.get("/process_NFA", (req, res) => {
             acceptStates: acceptStates,
             transitions: transitions,
             result: result,
-            statePath: statePath
+            statePath: statePath,
+            isValid: isValid
         });
     
     } catch (error) {

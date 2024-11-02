@@ -23,13 +23,10 @@ class DF_Automaton extends Automaton {
 
     process(input) {
         let result = false;
-        const statePath = [];
+        const statePath = [this.initialState];
 
         let currentState = this.initialState;
 
-        // if (!this.validate(input)) {
-        //     return { result: false, statePath: []};
-        // }
 
         if (input.length === 0) {
             console.log("EMPTY INPUT: fStates:", this.acceptStates);
@@ -38,7 +35,7 @@ class DF_Automaton extends Automaton {
 
         for (const symbol of input) {
             const key = `${currentState},${symbol}`;
-            const nextState = this.transitions.get(key);
+            const nextState = this.transitions.get(key)[0];
 
             if (nextState === undefined) {
                 result = false; // Transition not found
@@ -49,6 +46,7 @@ class DF_Automaton extends Automaton {
         }
 
         result = this.acceptStates.has(currentState);
+        console.log("statePath:", statePath);
 
         return { result, statePath };
     }
