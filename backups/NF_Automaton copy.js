@@ -7,8 +7,14 @@ class NF_Automaton extends Automaton {
     }
 
     process(input) {
+        console.log("NFA Processing  Start");
+        console.log("States:", this.states);
+        console.log("Initial State:", this.initialState);
+        console.log("Accept States:", Array.from(this.acceptStates));
+        console.log("Transitions:", this.transitions);
+        console.log("Input:", input);
+
         let currentStates = [this.initialState];
-        let result = false;
         const statePath = [currentStates];
         
         for (const symbol of input) {
@@ -22,10 +28,14 @@ class NF_Automaton extends Automaton {
             currentStates = Array.from(nextStates);
             statePath.push(currentStates);
             
+            
             if (currentStates.length === 0) {
                 break;
             }
         }
+
+        console.log("statePath:", statePath);
+        let result = false;
 
         // currentStates is the set of states that the input string ends in
         for (const state of currentStates) {
