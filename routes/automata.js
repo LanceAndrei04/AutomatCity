@@ -61,6 +61,9 @@ router.get("/process_NFA", (req, res) => {
 
         const NFA = new NF_Automaton(states, transitions, initialState, acceptStates);
         const { result, statePath } = NFA.process(testCase);
+
+        console.log("result:", result);
+        console.log("statePath:", statePath);
   
         res.json({ 
             states: states,
