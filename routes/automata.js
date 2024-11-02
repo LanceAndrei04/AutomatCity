@@ -8,6 +8,7 @@ router.get("/", (req, res) => {
   res.json({ result: "Route for processing Automata is working!" });
 });
 
+//TESTED implementation
 router.get("/process_DFA", (req, res) => {
     // need ko na inputs from frontend
     const { nodes, edges, testCase } = req.query;
@@ -46,6 +47,7 @@ router.get("/process_DFA", (req, res) => {
     }
   });
 
+//TESTED implementation
 router.get("/process_NFA", (req, res) => {
     // need ko na inputs from frontend
     const { nodes, edges, testCase } = req.query;
@@ -66,11 +68,6 @@ router.get("/process_NFA", (req, res) => {
         const isValid = DFA.validate(alphabet);
         
         const { result, statePath } = NFA.process(testCase);
-
-        // console.log("result:", result);
-        // console.log("statePath:", statePath);
-        // console.log("isValid:", isValid);
-        // console.log("transitions:", transitions);
   
         res.json({ 
             states: states,
@@ -87,11 +84,12 @@ router.get("/process_NFA", (req, res) => {
     }
   });
 
+//UNTESTED implementation
 router.get("/validate_DFA", (req, res) => {
     // Get inputs from frontend
-    const { nodes, edges, testCase } = req.query;
+    const { nodes, edges } = req.query;
     
-    if (!nodes || !edges || !testCase) {
+    if (!nodes || !edges) {
         return res.status(400).json({ error: "Missing required parameters" });
     }
 
@@ -100,17 +98,19 @@ router.get("/validate_DFA", (req, res) => {
         for (const edge of edges) {
             alphabet.add(edge.data);
         }
+
+        const { states, transitions, initialState, acceptStates } = Automaton.parseAutomaton(nodes, edges);
+
+        const DFA = new DF_Automaton(states, transitions, initialState, acceptStates);
+        const result = DFA.validate(alphabet);
   
-        res.json({ 
-            result,
-            alphabet
+        res.status(200).json({ 
+            result
         });
     
     } catch (error) {
         res.status(400).json({ error: "Invalid input format" });
     }
 });
-
-
 
 module.exports = router;

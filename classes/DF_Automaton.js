@@ -15,6 +15,12 @@ class DF_Automaton extends Automaton {
                 if(!this.transitions.has(expectedTransitionKey)) {
                     isValid = false;
                 }
+                else {
+                    const expectedTransitions = this.transitions.get(expectedTransitionKey);
+                    if (expectedTransitions.length !== 1) {
+                        isValid = false;
+                    }
+                }
             });        
         }
 
