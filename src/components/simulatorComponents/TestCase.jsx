@@ -1,64 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Lottie from 'react-lottie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLightbulb, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+
+// Import animations
+import happyFace from '../assetJson/happyFace.json';
+import sadFace from '../assetJson/sadFace.json';
+import neutralFace from '../assetJson/nuetralFace.json';
 
 const TestCase = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [bulbColor, setBulbColor] = useState('gray');
-  const [glowClass, setGlowClass] = useState('');
-  const [displayedMessage, setDisplayedMessage] = useState('');
+  const [inputText, setInputText] = useState('');
+  const [sentText, setSentText] = useState('');
+  const [animationData, setAnimationData] = useState(neutralFace); // Default neutral face
+  const [isTyping, setIsTyping] = useState(false); // Track if the user is typing
+  const lottieRef = useRef(null); // Reference to Lottie instance
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-    setBulbColor('gray'); // Reset bulb color to gray on new input
-    setGlowClass(''); // Remove glow effect
+  // Handle input change
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
+    setIsTyping(true);  // Set typing status to true
   };
 
-  const handleSendClick = () => {
-    if (inputValue === 'a') {
-      setBulbColor('green');
-      setGlowClass('glow-green');
-      setTimeout(() => {
-        setGlowClass(''); // Remove glow effect after a delay
-      }, 1000); // Delay to make it look like it turned on
-    } else if (inputValue === 'b') {
-      setBulbColor('red');
-      setGlowClass('glow-red');
-      setTimeout(() => {
-        setGlowClass(''); // Remove glow effect after a delay
-      }, 1000); // Delay to make it look like it turned on
+  // Send message and play the Lottie animation
+  const handleSend = () => {
+    setSentText(inputText);  // Set the sent message text
+    setInputText('');  // Clear input text
+    setIsTyping(false);  // Stop typing when the message is sent
+
+    if (inputText === 'a') {
+      setAnimationData(happyFace);  // Happy face if 'A' is sent
+    } else {
+      setAnimationData(sadFace);  // Sad face for any other input
     }
-    setDisplayedMessage(inputValue); // Display the message below the bulb
-    setInputValue(''); // Clear input after sending
   };
+
+  // Default options for Lottie
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  };
+
+  // Trigger animation to play based on typing or sentText changes
+  useEffect(() => {
+    if (sentText) {
+      lottieRef.current.play();  // Play the animation after the text is sent
+    } else if (!isTyping) {
+      lottieRef.current.stop();  // Stop animation when idle or no text is sent
+    }
+  }, [sentText, isTyping]);
+
+  const textColor = animationData === happyFace ? 'text-green-500' : 'text-red-500';
 
   return (
-    <div className="flex flex-col items-center w-full p-4">
-
-      <div className={`flex items-center justify-center mb-2 ${glowClass}`} style={{ color: bulbColor }}>
-        <FontAwesomeIcon icon={faLightbulb} size="4x" />
-      </div>
-
-      {/* Text Input and Send Button */}
-      <div className="flex items-center w-full space-x-2">
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={inputValue}
-          onChange={handleInputChange}
-          className="flex-1 border-b-2 border-gray-400 bg-transparent outline-none"
+    <div className="neumorphic-container p-4 rounded-lg shadow-inner bg-gray-100 w-full max-w-lg mx-auto">
+      {/* Lottie Animation */}
+      <div className="text-center mb-4 p-2">
+        <Lottie
+          options={defaultOptions}
+          height="auto"
+          width="100%"  // Make the Lottie width responsive
+          isStopped={sentText === '' && !isTyping} 
+          isPaused={false}
+          ref={lottieRef} 
         />
-        <button onClick={handleSendClick}>
-          <FontAwesomeIcon icon={faPaperPlane} className="text-blue-500" />
-        </button>
       </div>
 
-      {/* Display the input message below the bulb */}
-      {displayedMessage && (
-        <div className="mt-2 text-lg text-gray-700">
-          {displayedMessage}
+      {/* Sent message display */}
+      {sentText && (
+        <div className={`text-center mb-2  text-lg font-bold ${textColor}`}>
+          {sentText}
         </div>
       )}
+
+      {/* Text input and send button */}
+      <div className="flex items-center">
+        <input
+          type="text"
+          value={inputText}
+          onChange={handleInputChange}  // Update state when typing
+          placeholder="Input string"
+          className="flex-1 p-2 rounded-md shadow-inner bg-gray-200 focus:outline-none w-48"
+        />
+        <button onClick={handleSend} className="ml-2 p-2 text-blue-500 w-full">
+          <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+        </button>
+      </div>
     </div>
   );
 };

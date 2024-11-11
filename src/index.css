@@ -9,31 +9,50 @@ html {
 .section-main{
     @apply  min-h-screen flex items-center justify-center bg-white;
 }
+
+
+body {
+    overflow: hidden;
+    overflow-y: scroll; 
+  }
+  
+
+body::-webkit-scrollbar {
+    display: none;
+}
   
 
 nav {;
  position: sticky;
   top: 0;
-  z-index: 10; /* Ensure it's above other content */
+  z-index: 10; 
 }
+
 
 /* Neumorphic Button */
 .neumorphic-btn {
-    @apply  shadow-md rounded-full p-2;
+    @apply shadow-md rounded-full p-4 ; /* Background color for the button */
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.7);
     transition: transform 0.2s ease-in-out;
-  }
-  
-  .neumorphic-btn:hover {
+}
+
+.neumorphic-btn:hover {
     transform: translateY(-2px);
-  }
-  
-  /* Neumorphic Container */
-  .neumorphic-container {
-    @apply shadow-md rounded-lg bg-gray-100 p-4;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.7);
-  }
-  
+}
+
+/* Convex Neumorphic Side Panel */
+.neumorphic-panel {
+    @apply shadow-lg rounded-lg bg-gray-100 p-4; /* Background color for the panel */
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3), -10px -10px 20px rgba(255, 255, 255, 0.5); /* Stronger shadow for a convex effect */
+}
+
+/* Concave Neumorphic Container */
+.neumorphic-container {
+    @apply bg-gray-100 p-4 rounded-lg; /* Background color and padding for the container */
+    box-shadow: inset 5px 5px 15px rgba(0, 0, 0, 0.3), inset -5px -5px 15px rgba(255, 255, 255, 0.7); /* Inset shadows for a concave effect */
+}
+
+
 
   @media (max-width: 640px) {
     .node-container {
@@ -41,12 +60,12 @@ nav {;
     }
     
     .node-container button {
-      flex: 1 0 45%; /* Each button takes 45% of the width, allowing for two buttons in a row */
-      margin: 5px; /* Add some margin between buttons */
+      flex: 1 0 45%; 
+      margin: 5px; 
     }
   }
   
- /* Existing styles remain unchanged */
+
 
 .glow-green {
     animation: glow-green 1s ease-in-out forwards;
@@ -59,27 +78,49 @@ nav {;
 @keyframes glow-green {
     0% {
         text-shadow: 0 0 5px green, 0 0 10px green, 0 0 15px green;
-        opacity: 0.7; /* Start with some opacity */
+        opacity: 0.7; 
     }
     50% {
-        opacity: 1; /* Full opacity at halfway */
+        opacity: 1;
     }
     100% {
         text-shadow: 0 0 20px green, 0 0 30px green, 0 0 40px green;
-        opacity: 0.5; /* Dim down slightly */
+        opacity: 0.5; 
     }
 }
 
 @keyframes glow-red {
     0% {
         text-shadow: 0 0 5px red, 0 0 10px red, 0 0 15px red;
-        opacity: 0.7; /* Start with some opacity */
+        opacity: 0.7; 
     }
     50% {
-        opacity: 1; /* Full opacity at halfway */
+        opacity: 1; 
     }
     100% {
         text-shadow: 0 0 20px red, 0 0 30px red, 0 0 40px red;
-        opacity: 0.5; /* Dim down slightly */
+        opacity: 0.5; 
     }
 }
+@media (max-width: 20px) {
+    .toggle-menu {
+      display: block; /* Show the toggle button */
+    }
+  }
+  
+  @media (min-width: 21px) {
+    .toggle-menu {
+      display: none; /* Hide the toggle button */
+    }
+  }
+  
+  .neumorphic-node {
+    background: #e0e5ec; /* Light gray background */
+    border-radius: 12px;  /* Rounded corners */
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), 
+                -8px -8px 15px rgba(255, 255, 255, 0.7); /* Neumorphic shadow */
+    padding: 10px;
+    text-align: center;
+    color: #333;
+  }
+  
