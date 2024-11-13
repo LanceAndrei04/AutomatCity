@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import NavBar from './components/NavBar';
 import MainPage from './pages/MainPage';
 import Simulator from './pages/Simulator';
+import { Toaster } from 'sonner';
 
 const App = () => {
   return (
     <Router>
+      <Toaster position='bottom-right'/>
       <Routes>
         {/* Redirect from the root path to /home */}
         <Route path="/" element={<Navigate to="/home" />} />
@@ -16,6 +18,7 @@ const App = () => {
           path="/home" 
           element={
             <>
+              
               <NavBar /> 
               <MainPage />
             </>

@@ -1,57 +1,115 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { toast } from 'sonner';
 
-const Popup = ({ isVisible, onClose, sections, tableData }) => {
+const Popup = ({ isVisible, onClose, popupType, data, addNode, nodeData}) => {
+  const [nodeName, setNodeName] = useState('');
+
   if (!isVisible) return null;
+
+  const handleInputChange = (e) => {
+    setNodeName(e.target.value); // Update the node name as the user types
+  };
+
+  const handleSubmit = () => {
+    if (!nodeName.trim()) {
+      // If the nodeName is empty or contains only spaces, show a warning toast
+      toast.error('Node name cannot be empty!', {
+        style: { backgroundColor: '#ed1c24', color: 'white' }, 
+      });
+    } else {
+      // If the nodeName is valid, show a success toast
+      toast.success(`Node ${nodeName} added!`, {
+        style: { backgroundColor: '#34d399', color: 'white' }, 
+      });
+  
+      // Use the addNode function to add the new node
+      addNode({ 
+        name: nodeName, 
+        color: nodeData.color || 'bg-orange-500' // Use default color if not provided
+      });
+  
+      onClose(); // Close the popup after submitting
+    }
+  };
+  
+
+
+
+  // Function to render sections and table data in a structured layout
+  const renderTupleContent = (sections, tableData) => {
+    return (
+      <div>
+        {/* Render sections */}
+        {sections.map((section, index) => (
+          <div key={index} className="mb-6">
+            <h3 className="text-xl font-bold mb-2">{section.title}</h3>
+            <p>{section.content}</p>
+          </div>
+        ))}
+
+        {/* Render tableData */}
+        <div>
+          <h3 className="text-xl font-bold mb-2">Table Data</h3>
+          <table className="min-w-full table-auto border-collapse border border-gray-200">
+            <thead>
+              <tr className="bg-gray-200">
+                {tableData[0].map((header, index) => (
+                  <th key={index} className="border border-gray-300 p-2">{header}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.slice(1).map((row, index) => (
+                <tr key={index} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex} className="border border-gray-300 p-2">{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
       {/* Overlay */}
       <div className="fixed inset-0 flex justify-center items-center z-50 bg-gray-600 bg-opacity-50">
         {/* Popup content */}
-        <div className="bg-white rounded-lg p-6 shadow-lg max-w-full md:max-w-lg w-full m-16">
-          
+        <div className="bg-white rounded-lg p-6 shadow-lg max-w-full md:max-w-lg w-full m-16 my-16">
           {/* Close Button placed at the top-right corner */}
           <div className="flex justify-end mb-4">
-            <button
-              onClick={onClose}
-              className="text-xl text-gray-700"
-            >
+            <button onClick={onClose} className="text-xl text-gray-700">
               &#10005; {/* Close Icon */}
             </button>
           </div>
 
-          {/* Dynamically render sections */}
-          <div>
-            <h2 className="text-2xl font-bold flex justify-center">Tuples</h2>
-            {sections.map((section, index) => (
-              <div key={index} className="mb-4">
-                <h3 className="text-xl font-semibold">{section.title}</h3>
-                <p>{section.content}</p>
+          {/* Dynamic Content Based on popupType */}
+          {popupType === 'nodeName' ? (
+            <div>
+              <h2 className="text-2xl font-bold text-center mb-4">Enter Node Name</h2>
+              <input
+                type="text"
+                value={nodeName}
+                onChange={handleInputChange}
+                className="border border-gray-300 p-2 rounded w-full mb-4"
+                placeholder="Enter node name"
+              />
+              <div className="flex justify-end">
+                <button onClick={handleSubmit} className="btn btn-primary px-8 py-2 text-white bg-blue-400 hover:bg-blue-600 rounded-lg">
+                    Add Node
+                </button>
               </div>
-            ))}
-          </div>
-
-          {/* Table with 3 columns */}
-          <div className="mt-4">
-            <table className="min-w-full table-auto border-collapse">
-              <thead>
-                <tr>
-                  <th className="border p-2">State</th>
-                  <th className="border p-2">A</th>
-                  <th className="border p-2">B</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tableData.slice(1).map((row, rowIndex) => (
-                  <tr key={rowIndex}>
-                    <td className="border p-2">{row[0]}</td>
-                    <td className="border p-2">{row[1]}</td>
-                    <td className="border p-2">{row[2]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            </div>
+          ) : popupType === 'tupleContent' ? (
+            <div>
+              <h2 className="text-2xl font-bold text-center mb-4">Tuple Content</h2>
+              {/* Render sections and tableData dynamically */}
+              {renderTupleContent(data.sections, data.tableData)}
+            </div>
+          ) : null}
         </div>
       </div>
     </>

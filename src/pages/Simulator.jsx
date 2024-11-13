@@ -5,47 +5,65 @@ import Panel from '../components/simulatorComponents/panel';
 import Header from '../components/simulatorComponents/Header';
 import Popup from '../components/Popup';
 import { sections, tableData } from '../components/contents';
+import Form from '../components/Form';
+import FlowSim from '../components/simulatorComponents/FlowSim';
 
 const Simulator = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [popupData, setPopupData] = useState(null); // Data for the popup (either node name or dynamic content)
+  const [popupType, setPopupType] = useState(null); // Type of the popup (either "nodeName" or "tupleContent")
   const [nodes, setNodes] = useState([]);
+  const [isFormVisible, setIsFormVisible] = useState(false); // State for form visibility
   const navigate = useNavigate();
+  const [isDfa, setIsDfa] = useState(true);
 
-  // Function to show popup
-  const handlePopupOpen = () => {
+  // Function to show popup for entering node name
+  const handleNodeNamePopupOpen = (node) => {
+    setPopupType('nodeName'); // Set the popup type to 'nodeName'
+    setPopupData(node); // Pass the node data to the popup
     setIsPopupVisible(true);
   };
 
-  // Function to hide popup
-  const handlePopupClose = () => {
-    setIsPopupVisible(false);
+  // Function to show popup for tuple generator content
+  const handleTupleContentPopupOpen = () => {
+    setPopupType('tupleContent'); // Set the popup type to 'tupleContent'
+    setPopupData({ sections, tableData }); // Pass the dynamic content to the popup
+    setIsPopupVisible(true);
   };
 
-  // Add a new node to the flow
-  const addNode = (node) => {
-    setNodes((prevNodes) => [
-      ...prevNodes,
-      { id: `${node.name}-${prevNodes.length}`, ...node, position: { x: 100 + prevNodes.length * 150, y: 100 } }
-    ]);
+  // Function to hide the popup
+  const handlePopupClose = () => {
+    setIsPopupVisible(false);
+    setPopupData(null); // Clear the popup data
+    setPopupType(null); // Clear the popup type
+  };
+
+  // Function to open the form when account button is clicked
+  const handleAccountClick = () => {
+    setIsFormVisible(true); // Corrected state variable name here
   };
 
   return (
     <div className="flex h-screen">
       {/* Left-side Panel */}
       <div className="w-1/4 py-2 px-4">
-        <Panel onButtonClick={handlePopupOpen} addNode={addNode} />
+        <Panel 
+          onTupleButtonClick={handleTupleContentPopupOpen} 
+          isDfa={isDfa}
+          setIsDfa={setIsDfa}
+        />
       </div>
 
       {/* Right-side main layout */}
       <div className="flex flex-col flex-1 h-full p-4 bg-white border-gray-300">
         {/* Header at the top */}
-        <div className="w-full bg-gray-200 shadow-md ">
-          <Header />
+        <div className="w-full bg-gray-200 shadow-md">
+          <Header onAccountClick={handleAccountClick} /> {/* Pass function here */}
         </div>
 
         {/* Flow component taking the remaining space */}
         <div className="flex-1 bg-gray-100 overflow-auto p-2">
-          <Flow nodes={nodes} />
+          <FlowSim isDfa={isDfa} />
         </div>
       </div>
 
@@ -53,9 +71,20 @@ const Simulator = () => {
       <Popup
         isVisible={isPopupVisible}
         onClose={handlePopupClose}
-        sections={sections}
-        tableData={tableData}
+        popupType={popupType}
+        data={popupData}
       />
+
+      
+      
+      {/* Form Modal - Show the form when isFormVisible is true */}
+      {isFormVisible && (
+        <div className="fixed inset-0 flex justify-center items-center z-50">
+          <div className=" p-8 rounded-lg  w-96">
+            <Form onClose={() => setIsFormVisible(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

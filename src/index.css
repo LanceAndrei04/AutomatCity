@@ -124,3 +124,23 @@ nav {;
     color: #333;
   }
   
+  .node {
+    width: 100px;
+    height: 100px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    box-shadow: 7px 7px 15px #bebebe, -7px -7px 15px #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #333;
+    position: absolute;
+    cursor: grab;
+  }
+  
+  .edge-label {
+    font-size: 12px;
+    fill: #555;
+  }
+  

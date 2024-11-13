@@ -3,24 +3,38 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import TestCase from './TestCase';
 import ToggleSwitch from './ToggleSwitch';
-import CircleButton from '../CircleButton';
 import TupleGenerator from './TupleGenerator';
-import MessageBox from './MessageBox';
+import Popup from '../Popup';
+import { toast } from 'sonner'; // Importing sonner toast
+
+const Panel = ({ onTupleButtonClick, isDfa, setIsDfa }) => {
 
 
-const Panel = ({ onButtonClick, addNode }) => {
   const [isPanelVisible, setIsPanelVisible] = useState(false);
-  const [selectedColor, setSelectedColor] = useState(null); // To track the selected button color
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const togglePanel = () => {
     setIsPanelVisible(!isPanelVisible);
   };
 
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
+  };
 
+  // Toggle DFA/NFA and show a toast message
+  const handleToggle = (newValue) => {
+    setIsDfa(newValue); // Update the state with the new value (true or false)
+    toast(`${newValue ? 'DFA' : 'NFA'} selected`, {
+      style: {
+        backgroundColor: newValue ? '#18a3e9' : '#e08906',
+        color: 'white',
+      },
+    });
+  };
+  
 
   return (
     <div className="relative">
-      {/* Toggle Button (only visible on small screens) */}
       <button
         className="lg:hidden fixed top-4 left-9 z-20 my-2"
         onClick={togglePanel}
@@ -28,7 +42,6 @@ const Panel = ({ onButtonClick, addNode }) => {
         <FontAwesomeIcon icon={faBars} size="2x" className="text-gray-700" />
       </button>
 
-      {/* Side Panel */}
       <div
         className={`fixed top-0 left-0 h-full p-4 md:p-6 bg-white rounded-lg shadow-lg transition-transform duration-300 ease-in-out z-10 transform ${
           isPanelVisible ? 'translate-x-0' : '-translate-x-full'
@@ -36,36 +49,39 @@ const Panel = ({ onButtonClick, addNode }) => {
           isPanelVisible ? 'w-full sm:w-1/2 md:w-1/4' : 'w-0'
         } overflow-auto`}
       >
-        {/* Panel Title */}
         <div className="text-center text-blue-500 text-2xl font-bold mb-4 mt-4">
           ToolKit
         </div>
-        
 
-        {/* Circle Buttons with onClick handler */}
-        <div className="flex justify-between mb-6 neumorphic-container">
-          <CircleButton color="bg-green-500" title="Initial State"  />
-          <CircleButton color="bg-yellow-500" title="State"  />
-          <CircleButton color="bg-red-500" title="Trap State"  />
-          <CircleButton color="bg-blue-500" title="Final State" />
+        <div className="flex justify-center neumorphic-btn mb-8">
+          {/* Pass isDfa and setIsDfa to the ToggleSwitch component */}
+          <ToggleSwitch isChecked={isDfa} onChange={handleToggle} />
         </div>
 
-        {/* Additional components */}
         <div className="mb-4">
           <TestCase />
         </div>
 
         <div className="mb-4 mt-4">
-          <TupleGenerator onButtonClick={onButtonClick} />
+          <TupleGenerator onButtonClick={onTupleButtonClick} />
         </div>
       </div>
 
-      {/* Overlay when panel is visible on smaller screens */}
       {isPanelVisible && (
         <div
-          className="fixed inset-0 bg-gray-600 opacity-50 z-5"
-          onClick={togglePanel} // Clicking on overlay will close the panel
+          className="fixed inset-0 bg-gray-600 opacity-50 z-0"
+          onClick={togglePanel}
         ></div>
+      )}
+
+      {isPopupVisible && (
+        <Popup
+          isVisible={isPopupVisible}
+          onClose={handleClosePopup}
+          onSave={handleAddNode}
+          nodeData={nodeData}
+          popupType="nodeName"
+        />
       )}
     </div>
   );

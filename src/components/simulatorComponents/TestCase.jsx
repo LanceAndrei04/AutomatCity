@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Lottie from 'react-lottie';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'sonner'; // Import Sonner's toast
 
 // Import animations
 import happyFace from '../assetJson/happyFace.json';
@@ -23,6 +24,16 @@ const TestCase = () => {
 
   // Send message and play the Lottie animation
   const handleSend = () => {
+    if (!inputText.trim()) {
+      toast.custom((t) => (
+        <div className="bg-red-600 text-white p-4 rounded-lg shadow-md flex items-center space-x-2">
+          <FontAwesomeIcon icon={faExclamationCircle} className="text-xl" />
+          <span>{`Input cannot be empty!`}</span>
+        </div>
+      ));
+      return;
+    }
+
     setSentText(inputText);  // Set the sent message text
     setInputText('');  // Clear input text
     setIsTyping(false);  // Stop typing when the message is sent
