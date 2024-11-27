@@ -59,7 +59,7 @@ const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
         </div>
 
         <div className="mb-4">
-          <TestCase nodes={nodes} edges={edges}/>
+          <TestCase nodes={nodes} edges={edges} isDfa={isDfa}/>
         </div>
 
         <div className="mb-4 mt-4">

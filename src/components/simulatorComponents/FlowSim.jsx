@@ -43,7 +43,10 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
   );
 
   const onEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+    (changes) => setEdges((eds) => {
+      onGetEdges(eds)
+      return applyEdgeChanges(changes, eds)
+    }),
     []
   );
 
@@ -84,7 +87,10 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
         }
         return e;
       });
-      setEdges(updatedEdges);
+      setEdges(prevEdges => {
+        onGetEdges(updatedEdges)
+        return updatedEdges
+      });
       setSelectedEdge(null);
       setEdgeName('');
     }
@@ -114,9 +120,12 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
   };
 
   const handleAddNode = ({ state, label }) => {
+    const isFinalState = state == "final"
+    const isInitialState = state == "initial"
+
     const newNode = {
-      id: (nodes.length + 1).toString(),
-      data: { label, state },
+      id: label,
+      data: { label, state, isFinalState, isInitialState },
       position: { x: Math.random() * 400, y: Math.random() * 400 },
       type: 'custom',
     };

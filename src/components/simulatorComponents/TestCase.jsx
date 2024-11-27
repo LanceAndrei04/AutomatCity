@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Lottie from 'react-lottie';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'sonner'; // Import Sonner's toast
@@ -9,7 +10,7 @@ import happyFace from '../assetJson/happyFace.json';
 import sadFace from '../assetJson/sadFace.json';
 import neutralFace from '../assetJson/nuetralFace.json';
 
-const TestCase = ({nodes, edges}) => {
+const TestCase = ({isDfa, nodes, edges}) => {
   const [inputText, setInputText] = useState('');
   const [sentText, setSentText] = useState('');
   const [animationData, setAnimationData] = useState(neutralFace); // Default neutral face
@@ -23,7 +24,7 @@ const TestCase = ({nodes, edges}) => {
   };
 
   // Send message and play the Lottie animation
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!inputText.trim()) {
       toast.custom((t) => (
         <div className="bg-red-600 text-white p-4 rounded-lg shadow-md flex items-center space-x-2">
@@ -33,9 +34,20 @@ const TestCase = ({nodes, edges}) => {
       ));
       return;
     }
+    
+    const currMode = isDfa ? "DFA" : "NFA"
+    const response = await axios.get(`http://localhost:3000/automata/process_${currMode.toUpperCase()}`, {
+      params: {
+          nodes,
+          edges,
+          testCase: inputText,
 
-    console.log("nodes", nodes)
-    console.log("edges", edges)
+      }
+    })  
+
+    console.log("response", response)
+    const transitionsMap = new Map(response.data.transitions);
+    console.log("transitions", transitionsMap)
 
     setSentText(inputText);  // Set the sent message text
     setInputText('');  // Clear input text
