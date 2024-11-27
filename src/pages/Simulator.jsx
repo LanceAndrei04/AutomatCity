@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Flow from '../components/simulatorComponents/Flow';
-import Panel from '../components/simulatorComponents/panel';
+import Panel from '../components/simulatorComponents/Panel';
 import Header from '../components/simulatorComponents/Header';
 import Popup from '../components/Popup';
 // import { sections, tableData } from '../components/contents';

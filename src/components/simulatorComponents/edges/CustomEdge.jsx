@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getBezierPath } from 'react-flow-renderer';
 
 const CustomEdge = ({
@@ -13,14 +13,26 @@ const CustomEdge = ({
   markerEnd,
   data,
 }) => {
-  const [path] = getBezierPath({
-    sourceX,
-    sourceY,
-    targetX,
-    targetY,
-    sourcePosition,
-    targetPosition,
-  });
+  const [path, setPath] = useState('');
+  const [labelPos, setLabelPos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const [newPath, labelCoords] = getBezierPath({
+      sourceX,
+      sourceY,
+      targetX,
+      targetY,
+      sourcePosition,
+      targetPosition,
+    });
+
+    setPath(newPath);
+    setLabelPos({
+      x: (sourceX + targetX) / 2,
+      y: (sourceY + targetY) / 2,
+    });
+
+  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition]);
 
   return (
     <>
@@ -35,7 +47,7 @@ const CustomEdge = ({
           orient="auto"
           markerUnits="strokeWidth"
         >
-          <polygon points="0 0, 10 5, 0 10" fill="#000" />
+          <polygon points="0 0, 10 5, 0 10" fill="red" />
         </marker>
       </defs>
 
@@ -50,13 +62,14 @@ const CustomEdge = ({
       {/* Edge Label */}
       {data?.label && (
         <text
-          x={(sourceX + targetX) / 2}
-          y={(sourceY + targetY) / 2}
+          x={labelPos.x}
+          y={labelPos.y}
           style={{
-            fontSize: '12px',
+            fontSize: '14px',
             fill: 'red',
             textAnchor: 'middle',
             dominantBaseline: 'middle',
+             backgroundColor: 'yellow',
           }}
         >
           {data.label}

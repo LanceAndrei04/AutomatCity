@@ -35,10 +35,10 @@ const CustomNodes = ({ id, data, selected }) => {
     <div id={id} style={getNodeStyle(data.state, selected)}>
       {data.label.toUpperCase()} {/* Display node label in uppercase */}
 
-      <Handle type="source" position="right" id="source-right" style={{ right: '-8px' }} />
-      <Handle type="target" position="top" id="target-top" style={{ top: '-8px' }} />
-      <Handle type="target" position="left" id="target-left" style={{ left: '-8px' }} />
-      <Handle type="target" position="bottom" id="target-bottom" style={{ bottom: '-8px' }} />
+      <Handle type="source" position="right" id="source-right" style={{ right: '-8px', backgroundColor: 'green' }} />
+      <Handle type="target" position="top" id="target-top" style={{ top: '-8px', backgroundColor: 'blue' }} />
+      <Handle type="target" position="left" id="target-left" style={{ left: '-8px', backgroundColor: 'blue' }} />
+      <Handle type="target" position="bottom" id="target-bottom" style={{ bottom: '-8px', backgroundColor: 'blue' }} />
     </div>
   );
 };

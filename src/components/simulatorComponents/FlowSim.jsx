@@ -131,7 +131,9 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
       });
 
       if (nodeAlreadyExist) {
-        toast.error(`${label.toUpperCase()} already exist!`)
+        toast.error(`${label.toUpperCase()} already exist!`, {
+          style: { backgroundColor: '#ed1c24', color: 'white' },
+        });
         return nds
       }
 
@@ -170,7 +172,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
         onSelectionChange={onSelectionChange}
         onEdgeClick={onEdgeClick}
       >
-        <Background />
+        <Background color="grey"  />
         <Controls />
       </ReactFlow>
 
@@ -194,30 +196,34 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
         </div>
       )}
 
-      <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
-        <div className="flex column space-x-2 neumorphic-btn ">
-          <CircleButton
-            color="bg-green-500"
-            title="Initial State"
-            onClick={() => handleButtonClick('initial')}
-          />
-          <CircleButton
-            color="bg-yellow-500"
-            title="State"
-            onClick={() => handleButtonClick('regular')}
-          />
-          <CircleButton
-            color="bg-red-500"
-            title="Trap State"
-            onClick={() => handleButtonClick('trap')}
-          />
-          <CircleButton
-            color="bg-blue-500"
-            title="Final State"
-            onClick={() => handleButtonClick('final')}
-          />
-        </div>
-      </div>
+<div style={{ position: 'absolute', top: '10px', left: '10px' }}>
+    <div className="flex space-x-2 neumorphic-container">
+      <CircleButton
+        color="bg-green-500"
+        title="Initial State"
+        onClick={() => handleButtonClick('initial')}
+        className="w-16 h-16 sm:w-20 sm:h-20"
+      />
+      <CircleButton
+        color="bg-yellow-500"
+        title="State"
+        onClick={() => handleButtonClick('regular')}
+        className="w-16 h-16 sm:w-20 sm:h-20"
+      />
+      <CircleButton
+        color="bg-red-500"
+        title="Trap State"
+        onClick={() => handleButtonClick('trap')}
+        className="w-16 h-16 sm:w-20 sm:h-20"
+      />
+      <CircleButton
+        color="bg-blue-500"
+        title="Final State"
+        onClick={() => handleButtonClick('final')}
+        className="w-16 h-16 sm:w-20 sm:h-20"
+      />
+    </div>
+  </div>
 
       {popupState && (
         <NodePopup
@@ -228,12 +234,6 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
       )}
 
       <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '10px' }}>
-        <button
-          className="p-2 bg-gray-100 rounded-full shadow-md neumorphic-btn hover:bg-green-300"
-          title="Save"
-        >
-          <FontAwesomeIcon icon={faDownload} size="lg" />
-        </button>
         <button
           onClick={handleDeleteAll} // Add the delete function here
           className="p-2 bg-gray-100 rounded-full shadow-md neumorphic-btn hover:bg-red-300"
