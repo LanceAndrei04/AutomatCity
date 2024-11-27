@@ -123,13 +123,28 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
     const isFinalState = state == "final"
     const isInitialState = state == "initial"
 
-    const newNode = {
-      id: label,
-      data: { label, state, isFinalState, isInitialState },
-      position: { x: Math.random() * 400, y: Math.random() * 400 },
-      type: 'custom',
-    };
-    setNodes((nds) => [...nds, newNode]);
+    setNodes((nds) => {
+
+      const nodeAlreadyExist = nds.some((node) => {
+        console.log(node)
+        return node.id === label.toUpperCase()
+      });
+
+      if (nodeAlreadyExist) {
+        toast.error(`${label.toUpperCase()} already exist!`)
+        return nds
+      }
+
+      const newNode = {
+        id: label.toUpperCase(),
+        data: { label, state, isFinalState, isInitialState },
+        position: { x: Math.random() * 400, y: Math.random() * 400 },
+        type: 'custom',
+      };
+
+      return [...nds, newNode]
+      
+    });
     setPopupState(null);
   };
 

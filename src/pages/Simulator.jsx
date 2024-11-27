@@ -57,7 +57,7 @@ const Simulator = () => {
       const {states, initialState, acceptStates, transitions, alphabet} = response.data
 
       let title = "States"
-      let content = states
+      let content = states.map(s => s[0]).join(", ");
 
       sections.push({title, content})
   
