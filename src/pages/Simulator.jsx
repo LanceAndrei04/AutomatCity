@@ -42,8 +42,8 @@ const Simulator = () => {
     // let initialState = null
     // let acceptStates = []
 
-    const sections = [
-    ]
+    const sections = []
+    const tableData = []
 
     try {
       const response = await axios.get(
@@ -58,12 +58,32 @@ const Simulator = () => {
 
       let title = "States"
       let content = states.map(s => s[0]).join(", ");
-
       sections.push({title, content})
-  
+
+      title = "Alphabet"
+      content = alphabet.filter(s => s !== "").join(", ");
+      sections.push({title, content})
+
+      title = "Initial State"
+      content = initialState
+      sections.push({title, content})
+
+      title = "Accepting States"
+      content = acceptStates.map(s => s[0]).join(", ")
+      sections.push({title, content})
+
+      //table data
+      let row = ["STATE"]
+      row = [...row, ...alphabet]
+
+      console.log(row, tableData)
+      
+      tableData.push(row)
+
+
     
     } catch (error) {
-      
+      console.error("error at generating tuples:", error)
     }
 
     
@@ -72,9 +92,7 @@ const Simulator = () => {
 
 
 
-    const tableData = [
-      ['0', '1', '0']
-    ]
+    
 
 
 

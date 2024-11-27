@@ -49,8 +49,9 @@ const Popup = ({ isVisible, onClose, popupType, data, addNode, nodeData}) => {
 
         {/* Render tableData */}
         <div>
-          <h3 className="text-xl font-bold mb-2">Table Data</h3>
-          <table className="min-w-full table-auto border-collapse border border-gray-200">
+          <h3 className="text-xl font-bold mb-2">{tableData.length > 0 ? "Table Data" : "No data available"}</h3>
+          {tableData.length > 0 && (
+            <table className="min-w-full table-auto border-collapse border border-gray-200">
             <thead>
               <tr className="bg-gray-200">
                 {tableData[0].map((header, index) => (
@@ -68,6 +69,7 @@ const Popup = ({ isVisible, onClose, popupType, data, addNode, nodeData}) => {
               ))}
             </tbody>
           </table>
+          )}
         </div>
       </div>
     );
