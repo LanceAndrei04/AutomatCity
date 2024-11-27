@@ -78,7 +78,22 @@ const Simulator = () => {
       row = [...row, ...alphabet]
       tableData.push(row)
 
-      
+      for (const t of transitions) {
+        // tableData.push(t)
+        row = [t[0]]
+        for (let i = 1; i < t.length; i++) {
+          if (t[i].length > 0) {
+            row.push(t[i].join(', '))
+          }
+          else {
+            row.push('⌀')
+          }
+        }
+
+        tableData.push(row)
+        row = []
+
+      }
     
     } catch (error) {
       console.error("error at generating tuples:", error)
