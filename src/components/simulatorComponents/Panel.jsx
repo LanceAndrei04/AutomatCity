@@ -7,7 +7,7 @@ import TupleGenerator from './TupleGenerator';
 import Popup from '../Popup';
 import { toast } from 'sonner'; // Importing sonner toast
 
-const Panel = ({ onTupleButtonClick, isDfa, setIsDfa }) => {
+const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
 
 
   const [isPanelVisible, setIsPanelVisible] = useState(false);
@@ -59,7 +59,7 @@ const Panel = ({ onTupleButtonClick, isDfa, setIsDfa }) => {
         </div>
 
         <div className="mb-4">
-          <TestCase />
+          <TestCase nodes={nodes} edges={edges}/>
         </div>
 
         <div className="mb-4 mt-4">

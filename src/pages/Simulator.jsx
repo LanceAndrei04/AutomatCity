@@ -7,12 +7,14 @@ import Popup from '../components/Popup';
 import { sections, tableData } from '../components/contents';
 import Form from '../components/Form';
 import FlowSim from '../components/simulatorComponents/FlowSim';
+import { toast } from 'sonner';
 
 const Simulator = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [popupData, setPopupData] = useState(null); // Data for the popup (either node name or dynamic content)
   const [popupType, setPopupType] = useState(null); // Type of the popup (either "nodeName" or "tupleContent")
   const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false); // State for form visibility
   const navigate = useNavigate();
   const [isDfa, setIsDfa] = useState(true);
@@ -43,6 +45,15 @@ const Simulator = () => {
     setIsFormVisible(true); // Corrected state variable name here
   };
 
+  const handleGetNodes = (newNodes) => {
+    setNodes(prevEdges => newNodes)
+  }
+
+  const handleGetEdges = (newEdges) => {
+    toast.success("EDGES CHANGED")
+    setEdges(prevEdges => newEdges)
+  }
+
   return (
     <div className="flex h-screen">
       {/* Left-side Panel */}
@@ -51,6 +62,8 @@ const Simulator = () => {
           onTupleButtonClick={handleTupleContentPopupOpen} 
           isDfa={isDfa}
           setIsDfa={setIsDfa}
+          nodes={nodes}
+          edges={edges}
         />
       </div>
 
@@ -63,7 +76,7 @@ const Simulator = () => {
 
         {/* Flow component taking the remaining space */}
         <div className="flex-1 bg-gray-100 overflow-auto p-2">
-          <FlowSim isDfa={isDfa} />
+          <FlowSim isDfa={isDfa} onGetEdges={handleGetEdges} onGetNodes={handleGetNodes}/>
         </div>
       </div>
 

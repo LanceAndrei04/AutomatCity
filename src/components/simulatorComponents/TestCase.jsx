@@ -9,7 +9,7 @@ import happyFace from '../assetJson/happyFace.json';
 import sadFace from '../assetJson/sadFace.json';
 import neutralFace from '../assetJson/nuetralFace.json';
 
-const TestCase = () => {
+const TestCase = ({nodes, edges}) => {
   const [inputText, setInputText] = useState('');
   const [sentText, setSentText] = useState('');
   const [animationData, setAnimationData] = useState(neutralFace); // Default neutral face
@@ -33,6 +33,9 @@ const TestCase = () => {
       ));
       return;
     }
+
+    console.log("nodes", nodes)
+    console.log("edges", edges)
 
     setSentText(inputText);  // Set the sent message text
     setInputText('');  // Clear input text

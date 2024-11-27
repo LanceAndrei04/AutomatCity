@@ -18,7 +18,7 @@ import CustomEdge from './edges/CustomEdge';
 
 const initialEdges = [];
 
-const FlowSim = ({ isDfa }) => {
+const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
   const nodeTypes = {
     custom: CustomNodes,
   };
@@ -35,7 +35,10 @@ const FlowSim = ({ isDfa }) => {
   const [selectedEdge, setSelectedEdge] = useState(null);
 
   const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    (changes) => setNodes((nds) => {
+      onGetNodes(nds)
+      return applyNodeChanges(changes, nds)
+    }),
     []
   );
 
@@ -47,7 +50,11 @@ const FlowSim = ({ isDfa }) => {
   const onConnect = useCallback(
     (params) => {
       if (params.sourceHandle === 'source-right') {
-        setEdges((eds) => addEdge({ ...params, data: { label: ' ' } }, eds));
+        setEdges((eds) => {
+          const newEdges = addEdge({ ...params, data: { label: ' ' } }, eds)
+          onGetEdges(newEdges)
+          return newEdges
+        });
       }
     },
     []
