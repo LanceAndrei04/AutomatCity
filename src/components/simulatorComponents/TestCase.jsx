@@ -35,29 +35,48 @@ const TestCase = ({isDfa, nodes, edges}) => {
       return;
     }
     
-    const currMode = isDfa ? "DFA" : "NFA"
-    const response = await axios.get(`http://localhost:3000/automata/process_${currMode.toUpperCase()}`, {
-      params: {
+    const processMode = isDfa ? "DFA" : "NFA"
+
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/automata/process_${processMode.toUpperCase()}`, {
+        params: {
           nodes,
           edges,
           testCase: inputText,
+        }
+      })
 
+      const {result: isAccepted, isValidDFA} = response.data
+
+      if (isAccepted) {
+        setAnimationData(happyFace);  // Happy face if accepted
+      } else {
+        setAnimationData(sadFace);  // Sad face if not
+      } 
+
+      if (!isValidDFA && processMode == "DFA") {
+        toast.custom((t) => (
+          <div className="bg-red-600 text-white p-4 rounded-lg shadow-md flex items-center space-x-2">
+            <FontAwesomeIcon icon={faExclamationCircle} className="text-xl" />
+            <span>{"Not a valid DFA"}</span>
+          </div>
+        ));
       }
-    })  
 
-    console.log("response", response)
-    const transitionsMap = new Map(response.data.transitions);
-    console.log("transitions", transitionsMap)
+    } catch (error) {
 
-    setSentText(inputText);  // Set the sent message text
-    setInputText('');  // Clear input text
-    setIsTyping(false);  // Stop typing when the message is sent
+      console.error("Error at proccessing the automaton:", error)
+      setAnimationData(sadFace);
 
-    if (inputText === 'a') {
-      setAnimationData(happyFace);  // Happy face if 'A' is sent
-    } else {
-      setAnimationData(sadFace);  // Sad face for any other input
+    } finally {
+
+      setSentText(inputText);  // Set the sent message text
+      setInputText('');  // Clear input text
+      setIsTyping(false);  // Stop typing when the message is sent
+
     }
+    
   };
 
   // Default options for Lottie

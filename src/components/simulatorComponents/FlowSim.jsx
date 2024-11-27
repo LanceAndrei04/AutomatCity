@@ -54,7 +54,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
     (params) => {
       if (params.sourceHandle === 'source-right') {
         setEdges((eds) => {
-          const newEdges = addEdge({ ...params, data: { label: ' ' } }, eds)
+          const newEdges = addEdge({ ...params, data: { label: '' } }, eds)
           onGetEdges(newEdges)
           return newEdges
         });
@@ -83,7 +83,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
     if (selectedEdge) {
       const updatedEdges = edges.map((e) => {
         if (e.id === selectedEdge.id) {
-          e.data = { ...e.data, label: edgeName };
+          e.data = { ...e.data, label: edgeName.trim() };
         }
         return e;
       });

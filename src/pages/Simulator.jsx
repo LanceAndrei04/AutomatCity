@@ -4,10 +4,11 @@ import Flow from '../components/simulatorComponents/Flow';
 import Panel from '../components/simulatorComponents/panel';
 import Header from '../components/simulatorComponents/Header';
 import Popup from '../components/Popup';
-import { sections, tableData } from '../components/contents';
+// import { sections, tableData } from '../components/contents';
 import Form from '../components/Form';
 import FlowSim from '../components/simulatorComponents/FlowSim';
 import { toast } from 'sonner';
+import axios from "axios"
 
 const Simulator = () => {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -27,7 +28,56 @@ const Simulator = () => {
   };
 
   // Function to show popup for tuple generator content
-  const handleTupleContentPopupOpen = () => {
+  const handleTupleContentPopupOpen = async () => {
+
+    // const sections = [
+    //   { title: "States", content: "State content here" },
+    //   { title: "Input", content: "Input content here" },
+    //   { title: "Initial States", content: "Initial States content here" },
+    //   { title: "Final States", content: "Final States content here" }
+    // ];
+
+    // let states = []
+    // let alphabet = []
+    // let initialState = null
+    // let acceptStates = []
+
+    const sections = [
+    ]
+
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/automata/generateTuples`, {
+        params: {
+          nodes,
+          edges,
+        }
+      })
+
+      const {states, initialState, acceptStates, transitions, alphabet} = response.data
+
+      let title = "States"
+      let content = states
+
+      sections.push({title, content})
+  
+    
+    } catch (error) {
+      
+    }
+
+    
+
+    // state section
+
+
+
+    const tableData = [
+      ['0', '1', '0']
+    ]
+
+
+
     setPopupType('tupleContent'); // Set the popup type to 'tupleContent'
     setPopupData({ sections, tableData }); // Pass the dynamic content to the popup
     setIsPopupVisible(true);
@@ -50,7 +100,6 @@ const Simulator = () => {
   }
 
   const handleGetEdges = (newEdges) => {
-    toast.success("EDGES CHANGED")
     setEdges(prevEdges => newEdges)
   }
 
