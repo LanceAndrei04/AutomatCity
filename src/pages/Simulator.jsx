@@ -74,26 +74,15 @@ const Simulator = () => {
 
       //table data
       let row = ["STATE"]
-      row = [...row, ...alphabet]
-
-      console.log(row, tableData)
       
+      row = [...row, ...alphabet]
       tableData.push(row)
 
-
+      
     
     } catch (error) {
       console.error("error at generating tuples:", error)
     }
-
-    
-
-    // state section
-
-
-
-    
-
 
 
     setPopupType('tupleContent'); // Set the popup type to 'tupleContent'
