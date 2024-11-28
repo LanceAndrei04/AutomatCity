@@ -3,7 +3,7 @@ const router = express.Router();
 const DF_Automaton = require("../classes/DF_Automaton");
 
 router.get("/", (req, res) => {
-  res.json({ result: "hakdog ka ba" });
+  res.json({ result: "Just a test!" });
 });
 
 router.get("/uppercase", (req, res) => {

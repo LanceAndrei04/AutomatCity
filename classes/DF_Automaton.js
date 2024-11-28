@@ -7,11 +7,17 @@ class DF_Automaton extends Automaton {
     }
 
     process(input) {
+
+        
+        
         let result = false;
         const statePath = [this.initialState];
-
+        
         let currentState = this.initialState;
-
+        
+        if (!this.validateDFA(this.alphabet)) {
+            return { result, statePath };
+        }
 
         if (input.length === 0) {
             return { result: this.acceptStates.has(currentState), statePath: [currentState] };
@@ -28,6 +34,8 @@ class DF_Automaton extends Automaton {
             currentState = nextState;
             statePath.push(currentState);
         }
+
+        
 
         result = this.acceptStates.has(currentState);
 

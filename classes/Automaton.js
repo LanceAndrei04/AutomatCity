@@ -17,15 +17,16 @@ class Automaton {
           if (node.data.isFinalState == "true") {
               acceptStates.add(node.id);
           }
+          if (node.data.isInitialState == "true") {
+            initialState = node.id;
+        }
       }
-
-      initialState = nodes[0].id;
 
       const transitions = new Map();
       
       // Process each edge
       for (const edge of edges) {
-          const key = `${edge.source},${edge.data}`;
+          const key = `${edge.source},${edge.data.label}`;
           
           // If this transition already exists, add to the array of targets
           if (transitions.has(key)) {
@@ -38,7 +39,7 @@ class Automaton {
 
       const alphabet = new Set();
       for (const edge of edges) {
-          alphabet.add(edge.data);  
+          alphabet.add(edge.data.label);  
       }
 
       return { states, transitions, initialState, acceptStates, alphabet };
