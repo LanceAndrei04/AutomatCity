@@ -4,10 +4,10 @@ import { faHome, faSave } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const goToHome = () => {
-    navigate('/home'); // Navigate to the main page
+    navigate('/home'); 
   };
   return (
     <header className="flex justify-between items-center p-4 bg-gray-200 rounded-md">
@@ -23,9 +23,7 @@ const Header = () => {
         >
           <FontAwesomeIcon icon={faHome} size="lg" />
         </button>
-        <button className="p-2 bg-gray-100 rounded-full shadow-md neumorphic-btn hover:bg-gray-300">
-          <FontAwesomeIcon icon={faSave} size="lg" /> {/* Save icon */}
-        </button>
+       
       </div>
     </header>
   );

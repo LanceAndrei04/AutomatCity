@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import html2canvas from 'html2canvas'; // Import html2canvas
 import {
   ReactFlow,
   Controls,
@@ -158,9 +159,21 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
     });
   };
 
+  // Function to capture screenshot
+  const captureScreenshot = () => {
+    const flowContainer = document.getElementById('react-flow'); // React Flow container
+    html2canvas(flowContainer).then((canvas) => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL(); // Convert canvas to image data URL
+      link.download = 'flow-screenshot.png'; // Set filename for the download
+      link.click(); // Trigger download
+    });
+  };
+
   return (
     <div style={{ height: '100%', position: 'relative' }}>
       <ReactFlow
+        id="react-flow" // Add an id to the React Flow container
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -196,34 +209,34 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
         </div>
       )}
 
-<div style={{ position: 'absolute', top: '10px', left: '10px' }}>
-    <div className="flex space-x-2 neumorphic-container">
-      <CircleButton
-        color="bg-green-500"
-        title="Initial State"
-        onClick={() => handleButtonClick('initial')}
-        className="w-16 h-16 sm:w-20 sm:h-20"
-      />
-      <CircleButton
-        color="bg-yellow-500"
-        title="State"
-        onClick={() => handleButtonClick('regular')}
-        className="w-16 h-16 sm:w-20 sm:h-20"
-      />
-      <CircleButton
-        color="bg-red-500"
-        title="Trap State"
-        onClick={() => handleButtonClick('trap')}
-        className="w-16 h-16 sm:w-20 sm:h-20"
-      />
-      <CircleButton
-        color="bg-blue-500"
-        title="Final State"
-        onClick={() => handleButtonClick('final')}
-        className="w-16 h-16 sm:w-20 sm:h-20"
-      />
-    </div>
-  </div>
+      <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
+        <div className="flex space-x-2 neumorphic-container">
+          <CircleButton
+            color="bg-green-500"
+            title="Initial State"
+            onClick={() => handleButtonClick('initial')}
+            className="w-16 h-16 sm:w-20 sm:h-20"
+          />
+          <CircleButton
+            color="bg-yellow-500"
+            title="State"
+            onClick={() => handleButtonClick('regular')}
+            className="w-16 h-16 sm:w-20 sm:h-20"
+          />
+          <CircleButton
+            color="bg-red-500"
+            title="Trap State"
+            onClick={() => handleButtonClick('trap')}
+            className="w-16 h-16 sm:w-20 sm:h-20"
+          />
+          <CircleButton
+            color="bg-blue-500"
+            title="Final State"
+            onClick={() => handleButtonClick('final')}
+            className="w-16 h-16 sm:w-20 sm:h-20"
+          />
+        </div>
+      </div>
 
       {popupState && (
         <NodePopup
@@ -240,6 +253,14 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
           title="Delete"
         >
           <FontAwesomeIcon icon={faTrash} size="lg" />
+        </button>
+
+        <button
+          onClick={captureScreenshot} // Add the screenshot capture function here
+          className="p-2 bg-gray-100 rounded-full shadow-md neumorphic-btn hover:bg-blue-300"
+          title="Download Screenshot"
+        >
+          <FontAwesomeIcon icon={faDownload} size="lg" />
         </button>
       </div>
     </div>
