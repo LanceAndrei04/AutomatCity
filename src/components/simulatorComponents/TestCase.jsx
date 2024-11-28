@@ -102,42 +102,42 @@ const TestCase = ({isDfa, nodes, edges}) => {
 
   return (
     <div className="neumorphic-container p-4 rounded-lg shadow-inner bg-gray-100 w-full max-w-lg mx-auto">
-  {/* Lottie Animation */}
-  <div className="text-center mb-4 p-2">
-    <Lottie
-      options={defaultOptions}
-      height="auto"
-      width="100%"  // Make the Lottie width responsive
-      isStopped={sentText === '' && !isTyping}
-      isPaused={false}
-      ref={lottieRef}
-    />
-  </div>
-
-  {/* Sent message display */}
-  {sentText && (
-    <div className={`text-center mb-2 text-lg font-bold ${textColor} break-words max-w-full`}>
-      {sentText}
+    {/* Lottie Animation */}
+    <div className="text-center mb-4 p-2">
+      <Lottie
+        options={defaultOptions}
+        height="auto"
+        width="100%"  // Make the Lottie width responsive
+        isStopped={sentText === '' && !isTyping}
+        isPaused={false}
+        ref={lottieRef}
+      />
     </div>
-  )}
-
-  {/* Text input and send button */}
-  <div className="flex flex-wrap items-center">
-    <input
-      type="text"
-      value={inputText}
-      onChange={handleInputChange}  // Update state when typing
-      placeholder="Input string"
-      className="flex-1 p-2 rounded-md shadow-inner bg-gray-200 focus:outline-none w-full sm:w-48"
-    />
-    <button
-      onClick={handleSend}
-      className="ml-2 p-2 text-blue-500 w-full sm:w-auto"
-    >
-      <FontAwesomeIcon icon={faPaperPlane} size="lg" />
-    </button>
+  
+    {/* Sent message display */}
+    {sentText && (
+      <div className={`text-center mb-2 text-lg font-bold ${textColor} break-words max-w-full`}>
+        {sentText}
+      </div>
+    )}
+  
+    {/* Text input and send button */}
+    <div className="flex flex-wrap items-center max-w-full w-full">  {/* Make sure parent respects width */}
+      <input
+        type="text"
+        value={inputText}
+        onChange={handleInputChange}  // Update state when typing
+        placeholder="Input string"
+        className="flex-1 p-2 rounded-md shadow-inner bg-gray-200 focus:outline-none w-full sm:w-48 box-border"  
+      />
+      <button
+        onClick={handleSend}
+        className="ml-2 p-2 text-blue-500 w-full sm:w-auto"
+      >
+        <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+      </button>
+    </div>
   </div>
-</div>
 
   );
 };
