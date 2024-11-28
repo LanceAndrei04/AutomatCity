@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Flow from '../components/simulatorComponents/Flow';
 import Panel from '../components/simulatorComponents/Panel';
 import Header from '../components/simulatorComponents/Header';
 import Popup from '../components/Popup';
-// import { sections, tableData } from '../components/contents';
 import Form from '../components/Form';
 import FlowSim from '../components/simulatorComponents/FlowSim';
 import { toast } from 'sonner';
