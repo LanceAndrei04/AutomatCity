@@ -15,8 +15,7 @@ function classNames(...classes) {
 }
 
 const NavBar = () => {
-  const [activeItem, setActiveItem] = useState(navigation[0].name); // Set initial active item
-
+  const [activeItem, setActiveItem] = useState(navigation[0].name); 
   const handleNavClick = (item) => {
     setActiveItem(item.name);
 

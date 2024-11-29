@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { getBezierPath } from 'react-flow-renderer';
 
 const CustomEdge = ({
@@ -10,36 +10,54 @@ const CustomEdge = ({
   sourcePosition,
   targetPosition,
   style = {},
-  markerEnd,
   data,
 }) => {
-  const [path, setPath] = useState('');
-  const [labelPos, setLabelPos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const [newPath, labelCoords] = getBezierPath({
-      sourceX,
-      sourceY,
-      targetX,
-      targetY,
-      sourcePosition,
-      targetPosition,
-    });
-
-    setPath(newPath);
-    setLabelPos({
-      x: (sourceX + targetX) / 2,
-      y: (sourceY + targetY) / 2,
-    });
-
-  }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition]);
+  // Generate the edge path using react-flow's utility
+  const [edgePath, labelX, labelY] = getBezierPath({
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    sourcePosition,
+    targetPosition,
+  });
 
   return (
     <>
+      {/* Edge Path */}
+      <path
+        id={id}
+        d={edgePath}
+        style={{
+          ...style,
+          stroke: 'blue', // Edge color
+          strokeWidth: 2,
+        }}
+        fill="none"
+        markerEnd="url(#blue-arrowhead)"
+      />
+
+      {/* Edge Label */}
+      {data?.label && (
+        <text
+          x={labelX}
+          y={labelY}
+          style={{
+            fontSize: '14px',
+            fill: 'blue', // Label color
+            textAnchor: 'middle',
+            dominantBaseline: 'middle',
+            pointerEvents: 'none', // Ensure label doesn't interfere with edge interactions
+          }}
+        >
+          {data.label}
+        </text>
+      )}
+
       {/* Arrowhead Marker */}
       <defs>
         <marker
-          id="arrowhead"
+          id="blue-arrowhead"
           markerWidth="10"
           markerHeight="10"
           refX="10"
@@ -47,34 +65,9 @@ const CustomEdge = ({
           orient="auto"
           markerUnits="strokeWidth"
         >
-          <polygon points="0 0, 10 5, 0 10" fill="red" />
+          <polygon points="0 0, 10 5, 0 10" fill="blue" />
         </marker>
       </defs>
-
-      {/* Edge Path */}
-      <path
-        id={id}
-        style={style}
-        d={path}
-        markerEnd="url(#arrowhead)"
-      />
-
-      {/* Edge Label */}
-      {data?.label && (
-        <text
-          x={labelPos.x}
-          y={labelPos.y}
-          style={{
-            fontSize: '14px',
-            fill: 'red',
-            textAnchor: 'middle',
-            dominantBaseline: 'middle',
-             backgroundColor: 'yellow',
-          }}
-        >
-          {data.label}
-        </text>
-      )}
     </>
   );
 };
