@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import {
   ReactFlow,
@@ -7,6 +7,7 @@ import {
   applyNodeChanges,
   applyEdgeChanges,
   addEdge,
+  useStore,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -28,6 +29,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
   const [selectedEdge, setSelectedEdge] = useState(null);
   const [animatedNodes, setAnimatedNodes] = useState(new Set());
   const [animatedEdges, setAnimatedEdges] = useState(new Set());
+  const reactFlowInstance = useRef(null);
 
   // Handle test path animation
   useEffect(() => {
@@ -216,10 +218,21 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
         return nds;
       }
 
+      // Get the flow container dimensions
+      const flowContainer = document.querySelector('.react-flow');
+      let centerX = 0;
+      let centerY = 0;
+
+      if (flowContainer) {
+        const rect = flowContainer.getBoundingClientRect();
+        centerX = rect.width / 2;
+        centerY = rect.height / 2;
+      }
+
       const newNode = {
         id: label.toUpperCase(),
         data: { label, state, isFinalState, isInitialState },
-        position: { x: Math.random() * 400, y: Math.random() * 400 },
+        position: { x: centerX, y: centerY },
         type: 'custom',
       };
 
@@ -236,44 +249,39 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
     });
   };
 
+  const onInit = (instance) => {
+    reactFlowInstance.current = instance;
+  };
+
   const captureScreenshot = () => {
-    const flowWrapper = document.querySelector('.react-flow');
-    const viewport = document.querySelector('.react-flow__viewport');
-    
-    if (flowWrapper && viewport) {
-      const originalTransform = viewport.style.transform;
-      viewport.style.transform = 'translate(0,0) scale(1)';
-
-      const options = {
-        allowTaint: true,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        width: flowWrapper.offsetWidth,
-        height: flowWrapper.offsetHeight,
-        scrollX: 0,
-        scrollY: 0
-      };
-
-      html2canvas(flowWrapper, options)
-        .then((canvas) => {
-          viewport.style.transform = originalTransform;
-          const link = document.createElement('a');
-          link.href = canvas.toDataURL('image/png', 1.0);
-          link.download = 'automata-diagram.png';
-          link.click();
-        })
-        .catch((err) => {
-          console.error('Screenshot error:', err);
-          toast.error('Failed to capture screenshot', {
-            style: { backgroundColor: '#ef4444', color: 'white' }
-          });
-          viewport.style.transform = originalTransform;
-        });
-    }
+    html2canvas(document.body, {
+      backgroundColor: '#ffffff',
+      useCORS: true,
+      allowTaint: true,
+      foreignObjectRendering: true,
+      width: window.innerWidth,
+      height: window.innerHeight,
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+      x: window.scrollX,
+      y: window.scrollY,
+      scrollX: window.scrollX,
+      scrollY: window.scrollY
+    }).then(canvas => {
+      const link = document.createElement('a');
+      link.download = 'automata-diagram.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }).catch(err => {
+      console.error('Screenshot error:', err);
+      toast.error('Failed to capture screenshot', {
+        style: { backgroundColor: '#ef4444', color: 'white' }
+      });
+    });
   };
 
   return (
-    <div style={{ height: '100%', position: 'relative' }}>
+    <div className="react-flow-wrapper" style={{ height: '100%', position: 'relative' }}>
       <ReactFlow
         nodes={nodes.map(node => ({
           ...node,
@@ -289,6 +297,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
+        onInit={onInit}
         onSelectionChange={onSelectionChange}
         onEdgeClick={onEdgeClick}
       >
