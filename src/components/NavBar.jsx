@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import React, { useState, useEffect } from 'react';
+import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 
@@ -10,22 +10,48 @@ const navigation = [
   { name: 'Simulator', href: '/simulator', current: false },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
-
 const NavBar = () => {
-  const [activeItem, setActiveItem] = useState(navigation[0].name); 
-  const handleNavClick = (item) => {
-    setActiveItem(item.name);
+  const [activeItem, setActiveItem] = useState('Home');
 
-    // Prevent URL update and scroll to top for Home
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navigation
+        .filter(item => item.href.startsWith('#'))
+        .map(item => ({
+          name: item.name,
+          element: document.querySelector(item.href)
+        }));
+
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i];
+        if (section.element) {
+          const offsetTop = section.element.offsetTop;
+          if (scrollPosition >= offsetTop) {
+            setActiveItem(section.name);
+            break;
+          }
+        }
+      }
+
+      // If we're at the top of the page, set Home as active
+      if (window.scrollY < 100) {
+        setActiveItem('Home');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleNavClick = (item) => {
     if (item.name === 'Home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-
-    // Smooth scrolling for other sections
     if (item.href.startsWith('#')) {
       const targetElement = document.querySelector(item.href);
       if (targetElement) {
@@ -35,78 +61,104 @@ const NavBar = () => {
   };
 
   return (
-    <Disclosure as="nav" className="bg-blue-400 shadow-lg z-20">
-      <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-        <div className="relative flex h-16 items-center justify-between">
-          <div className="flex flex-shrink-0 items-center">
-            <h2 className="text-2xl font-bold text-blue-950 hover:text-blue-400">Automat City</h2>
+    <Disclosure as="nav" className="fixed w-full top-0 z-50 bg-white bg-opacity-90 backdrop-blur-sm shadow-md">
+      {({ open }) => (
+        <>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="relative flex h-16 items-center justify-between">
+              <div className="flex flex-1 items-center justify-between">
+                <div className="flex flex-shrink-0 items-center">
+                  <Link to="/" className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition duration-300">
+                    AutomatCity
+                  </Link>
+                </div>
+                
+                {/* Mobile menu button */}
+                <div className="flex items-center sm:hidden">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-blue-50 hover:text-blue-600 focus:outline-none">
+                    <span className="sr-only">Open main menu</span>
+                    {open ? (
+                      <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    ) : (
+                      <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                    )}
+                  </Disclosure.Button>
+                </div>
+
+                {/* Desktop menu */}
+                <div className="hidden sm:ml-6 sm:block">
+                  <div className="flex space-x-4">
+                    {navigation.map((item) => (
+                      <div key={item.name}>
+                        {item.name === 'Simulator' ? (
+                          <Link
+                            to={item.href}
+                            onClick={() => handleNavClick(item)}
+                            className={`px-3 py-2 text-sm font-medium rounded-md ${
+                              activeItem === item.name
+                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                                : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                            } transition duration-300`}
+                          >
+                            {item.name}
+                          </Link>
+                        ) : (
+                          <a
+                            href={item.href}
+                            onClick={() => handleNavClick(item)}
+                            className={`px-3 py-2 text-sm font-medium rounded-md ${
+                              activeItem === item.name
+                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                                : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                            } transition duration-300`}
+                          >
+                            {item.name}
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="hidden sm:ml-6 sm:block">
-            <div className="flex space-x-4">
+
+          {/* Mobile menu panel */}
+          <Disclosure.Panel className="sm:hidden">
+            <div className="space-y-1 px-2 pb-3 pt-2 bg-white">
               {navigation.map((item) => (
                 <div key={item.name}>
                   {item.name === 'Simulator' ? (
                     <Link
                       to={item.href}
-                      onClick={() => handleNavClick(item)} // Set active item on click
-                      className={classNames(
+                      onClick={() => handleNavClick(item)}
+                      className={`block px-3 py-2 text-base font-medium rounded-md ${
                         activeItem === item.name
-                          ? 'bg-blue-200 text-blue-950'
-                          : 'text-gray-600 hover:bg-blue-700 hover:text-white',
-                        'rounded-md px-3 py-2 text-l font-medium flex items-center' // Ensure alignment
-                      )}
+                          ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                          : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                      } transition duration-300`}
                     >
                       {item.name}
                     </Link>
                   ) : (
-                    <button
-                      onClick={() => handleNavClick(item)} // Set active item on click
-                      aria-current={activeItem === item.name ? 'page' : undefined}
-                      className={classNames(
+                    <a
+                      href={item.href}
+                      onClick={() => handleNavClick(item)}
+                      className={`block px-3 py-2 text-base font-medium rounded-md ${
                         activeItem === item.name
-                          ? 'bg-blue-200 text-blue-950'
-                          : 'text-gray-600 hover:bg-blue-700 hover:text-white',
-                        'rounded-md px-3 py-2 text-l font-medium flex items-center' // Ensure alignment
-                      )}
+                          ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                          : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                      } transition duration-300`}
                     >
                       {item.name}
-                    </button>
+                    </a>
                   )}
                 </div>
               ))}
             </div>
-          </div>
-          <div className="absolute inset-y-0 right-0 flex items-center sm:hidden">
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-              <span className="absolute -inset-0.5" />
-              <span className="sr-only">Open main menu</span>
-              <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
-              <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
-            </DisclosureButton>
-          </div>
-        </div>
-      </div>
-
-      <DisclosurePanel className="sm:hidden">
-        <div className="space-y-1 px-2 pb-3 pt-2">
-          {navigation.map((item) => (
-            <DisclosureButton
-              key={item.name}
-              as="button"
-              onClick={() => handleNavClick(item)} // Set active item on click
-              aria-current={activeItem === item.name ? 'page' : undefined}
-              className={classNames(
-                activeItem === item.name
-                  ? 'bg-blue-900 text-white'
-                  : 'text-gray-300 hover:bg-blue-700 hover:text-white',
-                'block rounded-md px-3 py-2 text-base font-medium'
-              )}
-            >
-              {item.name}
-            </DisclosureButton>
-          ))}
-        </div>
-      </DisclosurePanel>
+          </Disclosure.Panel>
+        </>
+      )}
     </Disclosure>
   );
 };

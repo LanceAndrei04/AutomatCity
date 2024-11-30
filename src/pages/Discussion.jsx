@@ -1,136 +1,271 @@
 import React, { useState } from 'react';
-import Lottie from 'react-lottie'; // Assuming you're using react-lottie for animations
-import nfa from '../components/assetJson/nfa.json';
-import dfa from '../components/assetJson/dfa.json';
-import nfaexample from '../assets/nfa_example.png';
-import dfaexample from '../assets/dfa_example.png';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  AcademicCapIcon, 
+  PuzzlePieceIcon, 
+  LightBulbIcon,
+  BeakerIcon,
+  ArrowRightIcon,
+  ChevronDownIcon
+} from '@heroicons/react/24/outline';
+
+const ContentSection = ({ title, icon, color, children, isActive, onClick }) => (
+  <motion.div
+    layout
+    onClick={onClick}
+    className={`bg-white/95 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden cursor-pointer hover:bg-white ${
+      isActive ? 'col-span-full' : ''
+    }`}
+    whileHover={{ y: -2, scale: 1.01 }}
+    transition={{ duration: 0.2 }}
+  >
+    <div className="p-6">
+      <div className="flex items-start space-x-4">
+        <div className={`p-3 rounded-xl bg-gradient-to-br ${color}`}>
+          {icon}
+        </div>
+        <div className="flex-grow">
+          <div className="flex justify-between items-center">
+            <h3 className="text-xl font-semibold text-gray-900">
+              {title}
+            </h3>
+            <ChevronDownIcon 
+              className={`w-5 h-5 transform transition-transform ${isActive ? 'rotate-180' : ''}`}
+            />
+          </div>
+          <AnimatePresence mode="wait">
+            {isActive && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="mt-4"
+              >
+                {children}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
 
 const Discussion = () => {
-  // State for managing the expand/collapse of facts
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
 
-  return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      {/* Automata Theory Definition */}
-      <div className="bg-gradient-to-r from-blue-200 via-blue-300 to-blue-400 rounded-xl shadow-lg p-8 mb-12">
-        <h1 className="text-5xl font-extrabold text-blue-900 text-center mb-6">Automata Theory</h1>
-        <p className="text-lg text-gray-800 text-justify mb-8">
-          Automata theory is the study of abstract machines and the problems they can solve. It provides the foundation for understanding how machines process and recognize languages, which is fundamental in computer science and artificial intelligence.
-        </p>
-      </div>
-
-      {/* Expandable Facts Section */}
-      <div className="bg-white rounded-xl shadow-lg mb-12">
-        <div 
-          className="cursor-pointer p-6 bg-blue-400 hover:bg-blue-500 rounded-t-xl transition-all"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <h2 className="text-2xl font-semibold text-blue-950">Facts about Automata</h2>
-        </div>
-        {isExpanded && (
-          <div className="p-6 text-lg text-gray-700 bg-blue-50 rounded-b-xl text-justify">
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Automata can process and recognize regular languages.</li>
-              <li>Automata theory underpins many computer science fields, such as compilers and programming languages.</li>
-              <li>Finite Automata (DFA and NFA) are used to model systems with finite memory.</li>
-              <li>Automata are crucial for understanding the complexity of computation and decision-making.</li>
+  const sections = [
+    {
+      id: 'intro',
+      title: 'Introduction to Automata Theory',
+      icon: <AcademicCapIcon className="w-6 h-6 text-white" />,
+      color: 'from-blue-500 to-blue-600',
+      content: (
+        <div className="space-y-4 text-gray-600">
+          <p>
+            Automata Theory is a fundamental branch of theoretical computer science that studies abstract machines
+            and the problems they can solve. It provides the theoretical foundation for many aspects of computer science,
+            from compiler design to artificial intelligence.
+          </p>
+          
+          <div className="bg-blue-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Key Concepts:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Abstract machines and their computation capabilities</li>
+              <li>Formal languages and their classifications</li>
+              <li>Mathematical models of computation</li>
+              <li>State transitions and processing rules</li>
             </ul>
           </div>
-        )}
-      </div>
 
-      {/* Alphabet, Language, String Boxes */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
-        <div className="bg-gray-200 p-8 rounded-xl shadow-lg hover:shadow-2xl transform transition-all hover:scale-105">
-          <h3 className="text-2xl font-semibold text-purple-600 mb-4">Alphabet in Automata</h3>
-          <p className="text-lg text-gray-700 text-justify">
-            An alphabet is a finite set of symbols used by automata to process strings. These symbols are typically denoted by Σ (Sigma). For example, in binary automata, the alphabet is usually 0, 1.
+          <div className="bg-blue-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Importance in Computer Science:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Foundation for programming language design</li>
+              <li>Basis for compiler construction</li>
+              <li>Essential for formal verification</li>
+              <li>Crucial in pattern matching and text processing</li>
+            </ul>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'dfa',
+      title: 'Deterministic Finite Automata (DFA)',
+      icon: <PuzzlePieceIcon className="w-6 h-6 text-white" />,
+      color: 'from-purple-500 to-purple-600',
+      content: (
+        <div className="space-y-4 text-gray-600">
+          <p>
+            A Deterministic Finite Automaton (DFA) is the simplest form of automaton, characterized by its
+            predictable behavior and finite number of states. For each input symbol, a DFA transitions to
+            exactly one state.
           </p>
-        </div>
 
-        <div className="bg-gray-200 p-8 rounded-xl shadow-lg hover:shadow-2xl transform transition-all hover:scale-105">
-          <h3 className="text-2xl font-semibold text-blue-600 mb-4">Language in Automata</h3>
-          <p className="text-lg text-gray-700 text-justify">
-            A language is a set of strings formed by the alphabet of an automaton. A string is a sequence of symbols from the alphabet. The language recognized by an automaton consists of all the strings that can be accepted by the machine.
+          <div className="bg-purple-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Components of a DFA:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Finite set of states (Q)</li>
+              <li>Input alphabet (Σ)</li>
+              <li>Transition function (δ)</li>
+              <li>Initial state (q₀)</li>
+              <li>Set of accept states (F)</li>
+            </ul>
+          </div>
+
+          <div className="bg-purple-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Key Properties:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Exactly one transition for each input symbol</li>
+              <li>No epsilon (empty) transitions allowed</li>
+              <li>Always starts in the initial state</li>
+              <li>Accepts input if it ends in an accept state</li>
+            </ul>
+          </div>
+
+          <div className="bg-purple-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Real-world Applications:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Lexical analysis in compilers</li>
+              <li>Pattern matching in text editors</li>
+              <li>Protocol specification</li>
+              <li>Digital circuit design</li>
+            </ul>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'nfa',
+      title: 'Non-deterministic Finite Automata (NFA)',
+      icon: <LightBulbIcon className="w-6 h-6 text-white" />,
+      color: 'from-indigo-500 to-indigo-600',
+      content: (
+        <div className="space-y-4 text-gray-600">
+          <p>
+            A Non-deterministic Finite Automaton (NFA) is a more flexible version of a DFA that allows
+            multiple possible transitions for the same input symbol. This non-determinism makes NFAs
+            more powerful in terms of expression, though not in terms of computational power.
           </p>
-        </div>
 
-        <div className="bg-gray-200 p-8 rounded-xl shadow-lg hover:shadow-2xl transform transition-all hover:scale-105">
-          <h3 className="text-2xl font-semibold text-orange-600 mb-4">String in Automata</h3>
-          <p className="text-lg text-gray-700 text-justify">
-            A string is a finite sequence of symbols from an alphabet. Strings are the primary inputs that automata process. The way an automaton processes a string determines whether it is accepted or rejected based on the machine’s rules and transitions.
+          <div className="bg-indigo-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Key Features:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Multiple possible transitions for same input</li>
+              <li>Epsilon (ε) transitions allowed</li>
+              <li>Can be converted to equivalent DFA</li>
+              <li>More compact representation than DFA</li>
+            </ul>
+          </div>
+
+          <div className="bg-indigo-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Advantages over DFA:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>More intuitive design for complex patterns</li>
+              <li>Often requires fewer states</li>
+              <li>Easier to construct for certain problems</li>
+              <li>Natural representation of parallel processes</li>
+            </ul>
+          </div>
+        </div>
+      )
+    },
+    {
+      id: 'applications',
+      title: 'Applications and Impact',
+      icon: <BeakerIcon className="w-6 h-6 text-white" />,
+      color: 'from-green-500 to-green-600',
+      content: (
+        <div className="space-y-4 text-gray-600">
+          <p>
+            Automata theory has widespread applications across computer science and beyond. Its principles
+            form the foundation for many modern computing technologies and tools.
           </p>
-        </div>
-      </div>
 
-      {/* NFA and DFA Definitions */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* DFA Definition */}
-        <div className="bg-gradient-to-r from-white to-blue-100 rounded-xl shadow-lg p-8 mb-8">
-          <div className="w-full mb-6">
-            {/* DFA Animation on Top */}
-            <Lottie
-              options={{
-                animationData: dfa,
-                loop: true,
-                autoplay: true
-              }}
-              height={400}
-              width="100%"
-            />
+          <div className="bg-green-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Software Development:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Compiler design and implementation</li>
+              <li>Regular expression processing</li>
+              <li>Syntax highlighting in text editors</li>
+              <li>Code analysis tools</li>
+            </ul>
           </div>
-          <h2 className="text-3xl font-semibold text-green-800 text-center mb-6">Deterministic Finite Automaton</h2>
-          <div className="p-6 text-lg text-gray-700 text-justify">
-            <p>
-              A Deterministic Finite Automaton (DFA) is a finite state machine where for each state and input symbol, there is exactly one transition to a next state. In other words, given a state and an input symbol, the machine's behavior is deterministic.
-            </p>
-          </div>
-        </div>
 
-        {/* NFA Definition */}
-        <div className="bg-gradient-to-r from-white to-yellow-100 rounded-xl shadow-lg p-8 mb-8">
-          <div className="w-full mb-6">
-            {/* NFA Animation on Top */}
-            <Lottie
-              options={{
-                animationData: nfa,
-                loop: true,
-                autoplay: true
-              }}
-              height={400}
-              width="100%"
-            />
+          <div className="bg-green-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">System Design:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Protocol verification</li>
+              <li>Hardware circuit design</li>
+              <li>Communication systems</li>
+              <li>Security systems</li>
+            </ul>
           </div>
-          <h2 className="text-3xl font-semibold text-orange-800 text-center mb-6">Nondeterministic Finite Automaton</h2>
-          <div className="p-6 text-lg text-gray-700 text-justify">
-            <p>
-              A Nondeterministic Finite Automaton (NFA) is similar to a DFA but allows multiple transitions for a single input symbol. An NFA can also transition to a new state without reading any input (ε-transitions).
-            </p>
+
+          <div className="bg-green-50 p-4 rounded-lg space-y-2">
+            <h4 className="font-semibold text-gray-800">Emerging Applications:</h4>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Natural language processing</li>
+              <li>Machine learning models</li>
+              <li>Biological sequence analysis</li>
+              <li>Quantum computing algorithms</li>
+            </ul>
           </div>
         </div>
-      </div>
+      )
+    }
+  ];
 
-      {/* Separate Containers for Example Images */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-12">
-        {/* DFA Example Image */}
-        <div className="bg-gray-100 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all">
-          <h2 className="text-3xl font-semibold text-center text-blue-950 mb-4">DFA Example</h2>
-          <img
-            src={dfaexample}
-            alt="DFA Example"
-            className="w-full h-64 object-contain rounded-xl transform transition-all hover:scale-105"
-          />
+  return (
+    <div className="min-h-screen relative">
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Automata Theory
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Explore the fundamental concepts of automata theory and their applications
+            in computer science. Click each section to learn more.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {sections.map((section) => (
+            <ContentSection
+              key={section.id}
+              title={section.title}
+              icon={section.icon}
+              color={section.color}
+              isActive={activeSection === section.id}
+              onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
+            >
+              {section.content}
+            </ContentSection>
+          ))}
         </div>
 
-        {/* NFA Example Image */}
-        <div className="bg-gray-100 rounded-xl shadow-lg p-6 hover:shadow-xl transition-all">
-          <h2 className="text-3xl font-semibold text-center text-blue-950 mb-4">NFA Example</h2>
-          <img
-            src={nfaexample}
-            alt="NFA Example"
-            className="w-full h-64 object-contain rounded-xl transform transition-all hover:scale-105"
-          />
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-12 text-center"
+        >
+          <Link 
+            to="/simulator"
+            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl
+                    font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105
+                    transition duration-200 shadow-lg flex items-center justify-center mx-auto">
+            Try the Interactive Simulator
+            <ArrowRightIcon className="w-5 h-5 ml-2" />
+          </Link>
+        </motion.div>
       </div>
     </div>
   );
