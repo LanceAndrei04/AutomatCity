@@ -236,7 +236,9 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
         type: 'custom',
       };
 
-      return [...nds, newNode];
+      const updatedNodes = [...nds, newNode];
+      onGetNodes(updatedNodes); 
+      return updatedNodes;
     });
     setPopupState(null);
   };
@@ -244,6 +246,8 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
   const handleDeleteAll = () => {
     setNodes([]);
     setEdges([]);
+    onGetNodes([]);
+    onGetEdges([]);
     toast.success('All nodes and edges have been deleted', {
       style: { backgroundColor: '#22c55e', color: 'white' }
     });

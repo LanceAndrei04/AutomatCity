@@ -82,11 +82,8 @@ const TestCase = ({isDfa, nodes, edges}) => {
       return;
     }
 
-    // Find initial state - check both data.isInitial and type property
-    const initialState = nodes.find(node => 
-      node.data.isInitial === true || 
-      (node.data.type === 'initial' && node.data.type !== undefined)
-    );
+    // Find initial state - check data.state property
+    const initialState = nodes.find(node => node.data.state === 'initial');
 
     if (!initialState) {
       toast.error('No initial state found', {
@@ -104,7 +101,7 @@ const TestCase = ({isDfa, nodes, edges}) => {
       // Find valid edge for this character
       const validEdge = edges.find(edge => 
         edge.source === currentState && 
-        edge.label === char
+        edge.data?.label === char
       );
 
       if (!validEdge) {
@@ -116,12 +113,9 @@ const TestCase = ({isDfa, nodes, edges}) => {
       path.push(currentState);
     }
 
-    // Check if final state - check both data.isFinal and type property
+    // Check if final state
     const finalNode = nodes.find(node => node.id === currentState);
-    const isAccepted = accepted && (
-      finalNode?.data?.isFinal === true || 
-      (finalNode?.data?.type === 'final' && finalNode?.data?.type !== undefined)
-    );
+    const isAccepted = accepted && finalNode?.data?.state === 'final';
 
     setTestPath({ path, accepted: isAccepted });
     
