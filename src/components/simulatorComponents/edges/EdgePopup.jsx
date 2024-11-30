@@ -11,12 +11,12 @@ const EdgePopup = ({ edge, onUpdateEdgeLabel, onClose }) => {
   const handleUpdateLabel = () => {
     if (!label.trim()) {
       toast.error('Edge label cannot be empty!', {
-        style: { backgroundColor: '#ed1c24', color: 'white' },
+        style: { backgroundColor: '#ef4444', color: 'white' },
       });
     } else {
       onUpdateEdgeLabel({ edgeId: edge.id, label }); // Pass the edge ID and updated label
       toast.success(`Label updated to "${label}"`, {
-        style: { backgroundColor: '#34d399', color: 'white' },
+        style: { backgroundColor: '#22c55e', color: 'white' },
       });
       onClose(); // Close the popup after updating
     }

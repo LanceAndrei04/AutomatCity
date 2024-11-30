@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import html2canvas from 'html2canvas'; // Import html2canvas
+import React, { useState, useCallback, useEffect } from 'react';
+import html2canvas from 'html2canvas';
 import {
   ReactFlow,
   Controls,
@@ -19,7 +19,62 @@ import CustomEdge from './edges/CustomEdge';
 
 const initialEdges = [];
 
-const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
+const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState(initialEdges);
+  const [popupState, setPopupState] = useState(null);
+  const [selectedNodes, setSelectedNodes] = useState([]);
+  const [edgeName, setEdgeName] = useState('');
+  const [selectedEdge, setSelectedEdge] = useState(null);
+  const [animatedNodes, setAnimatedNodes] = useState(new Set());
+  const [animatedEdges, setAnimatedEdges] = useState(new Set());
+
+  // Handle test path animation
+  useEffect(() => {
+    if (testPath && testPath.path) {
+      animatePath(testPath.path, testPath.accepted);
+    }
+  }, [testPath]);
+
+  const animatePath = async (path, isAccepted) => {
+    setAnimatedNodes(new Set());
+    setAnimatedEdges(new Set());
+
+    // Animate each step in the path
+    for (let i = 0; i < path.length - 1; i++) {
+      const currentNode = path[i];
+      const nextNode = path[i + 1];
+      
+      // Find the edge between these nodes
+      const edge = edges.find(e => 
+        e.source === currentNode && 
+        e.target === nextNode
+      );
+
+      // Animate current node
+      setAnimatedNodes(prev => new Set([...prev, currentNode]));
+      
+      // Animate edge if found
+      if (edge) {
+        setAnimatedEdges(prev => new Set([...prev, edge.id]));
+      }
+
+      // Wait before moving to next node
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    // Animate final node
+    if (path.length > 0) {
+      setAnimatedNodes(prev => new Set([...prev, path[path.length - 1]]));
+    }
+
+    // Clear animation after delay
+    setTimeout(() => {
+      setAnimatedNodes(new Set());
+      setAnimatedEdges(new Set());
+    }, 2000);
+  };
+
   const nodeTypes = {
     custom: CustomNodes,
   };
@@ -28,40 +83,63 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
     custom: CustomEdge,
   };
 
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState(initialEdges);
-  const [popupState, setPopupState] = useState(null);
-  const [selectedNodes, setSelectedNodes] = useState([]);
-  const [edgeName, setEdgeName] = useState('');
-  const [selectedEdge, setSelectedEdge] = useState(null);
+  // Style nodes based on animation state
+  const getNodeStyle = (node) => {
+    if (animatedNodes.has(node.id)) {
+      return {
+        background: '#4ade80',
+        boxShadow: '0 0 10px #4ade80',
+        transition: 'all 0.3s ease'
+      };
+    }
+    return {};
+  };
+
+  // Style edges based on animation state
+  const getEdgeStyle = (edge) => {
+    if (animatedEdges.has(edge.id)) {
+      return {
+        stroke: '#4ade80',
+        strokeWidth: 3,
+        transition: 'all 0.3s ease'
+      };
+    }
+    return {};
+  };
 
   const onNodesChange = useCallback(
     (changes) => setNodes((nds) => {
-      onGetNodes(nds)
-      return applyNodeChanges(changes, nds)
+      const updatedNodes = applyNodeChanges(changes, nds);
+      onGetNodes(updatedNodes);
+      return updatedNodes;
     }),
-    []
+    [onGetNodes]
   );
 
   const onEdgesChange = useCallback(
     (changes) => setEdges((eds) => {
-      onGetEdges(eds)
-      return applyEdgeChanges(changes, eds)
+      const updatedEdges = applyEdgeChanges(changes, eds);
+      onGetEdges(updatedEdges);
+      return updatedEdges;
     }),
-    []
+    [onGetEdges]
   );
 
   const onConnect = useCallback(
     (params) => {
       if (params.sourceHandle === 'source-right') {
         setEdges((eds) => {
-          const newEdges = addEdge({ ...params, data: { label: '' } }, eds)
-          onGetEdges(newEdges)
-          return newEdges
+          const newEdges = addEdge({
+            ...params,
+            type: 'custom',
+            data: { label: '' }
+          }, eds);
+          onGetEdges(newEdges);
+          return newEdges;
         });
       }
     },
-    []
+    [onGetEdges]
   );
 
   const onSelectionChange = useCallback(
@@ -72,6 +150,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
   );
 
   const onEdgeClick = (event, edge) => {
+    event.stopPropagation();
     setSelectedEdge(edge);
     setEdgeName(edge.data?.label || '');
   };
@@ -82,15 +161,18 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
 
   const handleEdgeNameSubmit = () => {
     if (selectedEdge) {
-      const updatedEdges = edges.map((e) => {
-        if (e.id === selectedEdge.id) {
-          e.data = { ...e.data, label: edgeName.trim() };
-        }
-        return e;
-      });
-      setEdges(prevEdges => {
-        onGetEdges(updatedEdges)
-        return updatedEdges
+      setEdges((prevEdges) => {
+        const updatedEdges = prevEdges.map((e) => {
+          if (e.id === selectedEdge.id) {
+            return {
+              ...e,
+              data: { ...e.data, label: edgeName.trim() }
+            };
+          }
+          return e;
+        });
+        onGetEdges(updatedEdges);
+        return updatedEdges;
       });
       setSelectedEdge(null);
       setEdgeName('');
@@ -102,7 +184,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
       const initialNodeExists = nodes.some((node) => node.data.state === 'initial');
       if (initialNodeExists) {
         toast.error('Only one Initial State node is allowed!', {
-          style: { backgroundColor: '#ed1c24', color: 'white' },
+          style: { backgroundColor: '#ef4444', color: 'white' }
         });
         return;
       }
@@ -111,7 +193,7 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
     if (state === 'trap') {
       if (!isDfa) {
         toast.error('Trap State is not available in NFA!', {
-          style: { backgroundColor: '#ed1c24', color: 'white' },
+          style: { backgroundColor: '#ef4444', color: 'white' }
         });
         return;
       }
@@ -121,21 +203,17 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
   };
 
   const handleAddNode = ({ state, label }) => {
-    const isFinalState = state == "final"
-    const isInitialState = state == "initial"
+    const isFinalState = state === "final";
+    const isInitialState = state === "initial";
 
     setNodes((nds) => {
-
-      const nodeAlreadyExist = nds.some((node) => {
-        console.log(node)
-        return node.id === label.toUpperCase()
-      });
+      const nodeAlreadyExist = nds.some((node) => node.id === label.toUpperCase());
 
       if (nodeAlreadyExist) {
-        toast.error(`${label.toUpperCase()} already exist!`, {
-          style: { backgroundColor: '#ed1c24', color: 'white' },
+        toast.error(`${label.toUpperCase()} already exists!`, {
+          style: { backgroundColor: '#ef4444', color: 'white' }
         });
-        return nds
+        return nds;
       }
 
       const newNode = {
@@ -145,37 +223,66 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
         type: 'custom',
       };
 
-      return [...nds, newNode]
-      
+      return [...nds, newNode];
     });
     setPopupState(null);
   };
 
   const handleDeleteAll = () => {
-    setNodes([]); // Clear all nodes
-    setEdges([]); // Clear all edges
+    setNodes([]);
+    setEdges([]);
     toast.success('All nodes and edges have been deleted', {
-      style: { backgroundColor: '#4CAF50', color: 'white' },
+      style: { backgroundColor: '#22c55e', color: 'white' }
     });
   };
 
-  // Function to capture screenshot
   const captureScreenshot = () => {
-    const flowContainer = document.getElementById('react-flow'); // React Flow container
-    html2canvas(flowContainer).then((canvas) => {
-      const link = document.createElement('a');
-      link.href = canvas.toDataURL(); // Convert canvas to image data URL
-      link.download = 'flow-screenshot.png'; // Set filename for the download
-      link.click(); // Trigger download
-    });
+    const flowWrapper = document.querySelector('.react-flow');
+    const viewport = document.querySelector('.react-flow__viewport');
+    
+    if (flowWrapper && viewport) {
+      const originalTransform = viewport.style.transform;
+      viewport.style.transform = 'translate(0,0) scale(1)';
+
+      const options = {
+        allowTaint: true,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        width: flowWrapper.offsetWidth,
+        height: flowWrapper.offsetHeight,
+        scrollX: 0,
+        scrollY: 0
+      };
+
+      html2canvas(flowWrapper, options)
+        .then((canvas) => {
+          viewport.style.transform = originalTransform;
+          const link = document.createElement('a');
+          link.href = canvas.toDataURL('image/png', 1.0);
+          link.download = 'automata-diagram.png';
+          link.click();
+        })
+        .catch((err) => {
+          console.error('Screenshot error:', err);
+          toast.error('Failed to capture screenshot', {
+            style: { backgroundColor: '#ef4444', color: 'white' }
+          });
+          viewport.style.transform = originalTransform;
+        });
+    }
   };
 
   return (
     <div style={{ height: '100%', position: 'relative' }}>
       <ReactFlow
-        id="react-flow" // Add an id to the React Flow container
-        nodes={nodes}
-        edges={edges}
+        nodes={nodes.map(node => ({
+          ...node,
+          style: { ...node.style, ...getNodeStyle(node) }
+        }))}
+        edges={edges.map(edge => ({
+          ...edge,
+          style: { ...edge.style, ...getEdgeStyle(edge) }
+        }))}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
@@ -185,58 +292,82 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
         onSelectionChange={onSelectionChange}
         onEdgeClick={onEdgeClick}
       >
-        <Background color="grey"  />
+        <Background color="grey" />
         <Controls />
       </ReactFlow>
 
-      {selectedEdge && (
-        <div style={{ position: 'absolute', bottom: '10px', left: '10px' }}>
-          <div className="neumorphic-panel">
-            <input
-              type="text"
-              value={edgeName}
-              onChange={handleEdgeNameChange}
-              placeholder="Output"
-              style={{ padding: '8px', marginBottom: '10px' }}
+      {/* State Buttons */}
+      <div className="absolute top-2 left-2 z-10">
+        <div className="flex flex-col sm:flex-row gap-2 neumorphic-container p-2">
+          <div className="flex gap-2">
+            <CircleButton
+              color="bg-green-500"
+              title="Initial State"
+              onClick={() => handleButtonClick('initial')}
+              className="w-12 h-12 sm:w-16 sm:h-16"
             />
-            <button
-              onClick={handleEdgeNameSubmit}
-              style={{ padding: '8px 16px', backgroundColor: '#4CAF50', color: 'white' }}
-            >
-              Save Name
-            </button>
+            <CircleButton
+              color="bg-yellow-500"
+              title="State"
+              onClick={() => handleButtonClick('regular')}
+              className="w-12 h-12 sm:w-16 sm:h-16"
+            />
+          </div>
+          <div className="flex gap-2">
+            <CircleButton
+              color="bg-red-500"
+              title="Trap State"
+              onClick={() => handleButtonClick('trap')}
+              className="w-12 h-12 sm:w-16 sm:h-16"
+            />
+            <CircleButton
+              color="bg-blue-500"
+              title="Final State"
+              onClick={() => handleButtonClick('final')}
+              className="w-12 h-12 sm:w-16 sm:h-16"
+            />
           </div>
         </div>
-      )}
+      </div>
 
-      <div style={{ position: 'absolute', top: '10px', left: '10px' }}>
-        <div className="flex space-x-2 neumorphic-container">
-          <CircleButton
-            color="bg-green-500"
-            title="Initial State"
-            onClick={() => handleButtonClick('initial')}
-            className="w-16 h-16 sm:w-20 sm:h-20"
-          />
-          <CircleButton
-            color="bg-yellow-500"
-            title="State"
-            onClick={() => handleButtonClick('regular')}
-            className="w-16 h-16 sm:w-20 sm:h-20"
-          />
-          <CircleButton
-            color="bg-red-500"
-            title="Trap State"
-            onClick={() => handleButtonClick('trap')}
-            className="w-16 h-16 sm:w-20 sm:h-20"
-          />
-          <CircleButton
-            color="bg-blue-500"
-            title="Final State"
-            onClick={() => handleButtonClick('final')}
-            className="w-16 h-16 sm:w-20 sm:h-20"
-          />
+      {/* Action Buttons */}
+      <div className="absolute top-2 right-2 z-10">
+        <div className="flex gap-2">
+          <button
+            onClick={handleDeleteAll}
+            className="p-2 bg-gray-100 rounded-full shadow-md hover:bg-red-100 transition-colors"
+            title="Delete All"
+          >
+            <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
+          </button>
+          <button
+            onClick={captureScreenshot}
+            className="p-2 bg-gray-100 rounded-full shadow-md hover:bg-blue-100 transition-colors"
+            title="Download Screenshot"
+          >
+            <FontAwesomeIcon icon={faDownload} className="w-5 h-5" />
+          </button>
         </div>
       </div>
+
+      {/* Edge Label Input */}
+      {selectedEdge && (
+        <div className="absolute bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg">
+          <input
+            type="text"
+            value={edgeName}
+            onChange={handleEdgeNameChange}
+            placeholder="Enter input"
+            className="p-2 border rounded mb-2 w-full"
+          />
+          <button
+            onClick={handleEdgeNameSubmit}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-800 w-full"
+          >
+            Save Input
+          </button>
+        </div>
+      )}
 
       {popupState && (
         <NodePopup
@@ -245,24 +376,6 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges }) => {
           onClose={() => setPopupState(null)}
         />
       )}
-
-      <div style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '10px' }}>
-        <button
-          onClick={handleDeleteAll} // Add the delete function here
-          className="p-2 bg-gray-100 rounded-full shadow-md neumorphic-btn hover:bg-red-300"
-          title="Delete"
-        >
-          <FontAwesomeIcon icon={faTrash} size="lg" />
-        </button>
-
-        <button
-          onClick={captureScreenshot} // Add the screenshot capture function here
-          className="p-2 bg-gray-100 rounded-full shadow-md neumorphic-btn hover:bg-blue-300"
-          title="Download Screenshot"
-        >
-          <FontAwesomeIcon icon={faDownload} size="lg" />
-        </button>
-      </div>
     </div>
   );
 };

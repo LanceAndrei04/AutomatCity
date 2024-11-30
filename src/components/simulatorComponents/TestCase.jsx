@@ -15,6 +15,7 @@ const TestCase = ({isDfa, nodes, edges}) => {
   const [sentText, setSentText] = useState('');
   const [animationData, setAnimationData] = useState(neutralFace); // Default neutral face
   const [isTyping, setIsTyping] = useState(false); // Track if the user is typing
+  const [testPath, setTestPath] = useState(null);
   const lottieRef = useRef(null); // Reference to Lottie instance
 
   // Handle input change
@@ -26,12 +27,9 @@ const TestCase = ({isDfa, nodes, edges}) => {
   // Send message and play the Lottie animation
   const handleSend = async () => {
     if (!inputText.trim()) {
-      toast.custom((t) => (
-        <div className="bg-red-600 text-white p-4 rounded-lg shadow-md flex items-center space-x-2">
-          <FontAwesomeIcon icon={faExclamationCircle} className="text-xl" />
-          <span>{`Input cannot be empty!`}</span>
-        </div>
-      ));
+      toast.error('Input cannot be empty!', {
+        style: { backgroundColor: '#ef4444', color: 'white' }
+      });
       return;
     }
     
@@ -56,12 +54,9 @@ const TestCase = ({isDfa, nodes, edges}) => {
       } 
 
       if (!isValidDFA && processMode == "DFA") {
-        toast.custom((t) => (
-          <div className="bg-red-600 text-white p-4 rounded-lg shadow-md flex items-center space-x-2">
-            <FontAwesomeIcon icon={faExclamationCircle} className="text-xl" />
-            <span>{"Not a valid DFA"}</span>
-          </div>
-        ));
+        toast.error('Not a valid DFA', {
+          style: { backgroundColor: '#ef4444', color: 'white' }
+        });
       }
 
     } catch (error) {
@@ -77,6 +72,65 @@ const TestCase = ({isDfa, nodes, edges}) => {
 
     }
     
+  };
+
+  const testInput = () => {
+    if (!inputText.trim()) {
+      toast.error('Please enter an input string', {
+        style: { backgroundColor: '#ef4444', color: 'white' }
+      });
+      return;
+    }
+
+    // Find initial state - check both data.isInitial and type property
+    const initialState = nodes.find(node => 
+      node.data.isInitial === true || 
+      (node.data.type === 'initial' && node.data.type !== undefined)
+    );
+
+    if (!initialState) {
+      toast.error('No initial state found', {
+        style: { backgroundColor: '#ef4444', color: 'white' }
+      });
+      return;
+    }
+
+    let currentState = initialState.id;
+    let path = [currentState];
+    let accepted = true;
+
+    // Process each character
+    for (const char of inputText) {
+      // Find valid edge for this character
+      const validEdge = edges.find(edge => 
+        edge.source === currentState && 
+        edge.label === char
+      );
+
+      if (!validEdge) {
+        accepted = false;
+        break;
+      }
+
+      currentState = validEdge.target;
+      path.push(currentState);
+    }
+
+    // Check if final state - check both data.isFinal and type property
+    const finalNode = nodes.find(node => node.id === currentState);
+    const isAccepted = accepted && (
+      finalNode?.data?.isFinal === true || 
+      (finalNode?.data?.type === 'final' && finalNode?.data?.type !== undefined)
+    );
+
+    setTestPath({ path, accepted: isAccepted });
+    
+    toast(isAccepted ? 'Input accepted!' : 'Input rejected!', {
+      style: {
+        backgroundColor: isAccepted ? '#22c55e' : '#ef4444',
+        color: 'white',
+      },
+    });
   };
 
   // Default options for Lottie
@@ -101,43 +155,57 @@ const TestCase = ({isDfa, nodes, edges}) => {
   const textColor = animationData === happyFace ? 'text-green-500' : 'text-red-500';
 
   return (
-    <div className="neumorphic-container p-4 rounded-lg shadow-inner bg-gray-100 w-full max-w-lg mx-auto">
-    {/* Lottie Animation */}
-    <div className="text-center mb-4 p-2">
-      <Lottie
-        options={defaultOptions}
-        height="auto"
-        width="100%"  // Make the Lottie width responsive
-        isStopped={sentText === '' && !isTyping}
-        isPaused={false}
-        ref={lottieRef}
-      />
-    </div>
-  
-    {/* Sent message display */}
-    {sentText && (
-      <div className={`text-center mb-2 text-lg font-bold ${textColor} break-words max-w-full`}>
-        {sentText}
+    <div className="neumorphic-container p-3 sm:p-4 rounded-lg shadow-inner bg-gray-100 w-full max-w-[95%] sm:max-w-lg mx-auto">
+      {/* Lottie Animation */}
+      <div className="text-center mb-3 sm:mb-4 p-2">
+        <Lottie
+          options={defaultOptions}
+          height={200}
+          width="100%"
+          isStopped={sentText === '' && !isTyping}
+          isPaused={false}
+          ref={lottieRef}
+          style={{ maxWidth: '300px', margin: '0 auto' }}
+        />
       </div>
-    )}
-  
-    {/* Text input and send button */}
-    <div className="flex flex-wrap items-center max-w-full w-full">  {/* Make sure parent respects width */}
-      <input
-        type="text"
-        value={inputText}
-        onChange={handleInputChange}  // Update state when typing
-        placeholder="Input string"
-        className="flex-1 p-2 rounded-md shadow-inner bg-gray-200 focus:outline-none w-full sm:w-48 box-border"  
-      />
-      <button
-        onClick={handleSend}
-        className="ml-2 p-2 text-blue-500 w-full sm:w-auto"
-      >
-        <FontAwesomeIcon icon={faPaperPlane} size="lg" />
-      </button>
+    
+      {/* Sent message display */}
+      {sentText && (
+        <div className={`text-center mb-2 text-base sm:text-lg font-bold ${textColor} break-words px-2`}>
+          {sentText}
+        </div>
+      )}
+    
+      {/* Text input and send button */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 w-full">
+        <input
+          type="text"
+          value={inputText}
+          onChange={handleInputChange}
+          placeholder="Input string"
+          className="flex-1 p-2 rounded-md shadow-inner bg-gray-200 focus:outline-none w-full"
+        />
+        <button
+          onClick={handleSend}
+          className="sm:ml-2 p-2 text-blue-500 hover:text-blue-600 transition-colors w-full sm:w-auto bg-gray-200 sm:bg-transparent rounded-md sm:rounded-none"
+        >
+          <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+        </button>
+        <button
+          onClick={testInput}
+          className="sm:ml-2 p-2 text-blue-500 hover:text-blue-600 transition-colors w-full sm:w-auto bg-gray-200 sm:bg-transparent rounded-md sm:rounded-none"
+        >
+          Test
+        </button>
+      </div>
+      {testPath && (
+        <div className={`p-2 mt-2 rounded ${testPath.accepted ? 'bg-green-100' : 'bg-red-100'}`}>
+          Result: {testPath.accepted ? 'Accepted' : 'Rejected'}
+          <br />
+          Path: {testPath.path.join(' -> ')}
+        </div>
+      )}
     </div>
-  </div>
 
   );
 };

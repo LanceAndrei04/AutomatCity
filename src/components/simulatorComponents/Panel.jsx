@@ -8,10 +8,9 @@ import Popup from '../Popup';
 import { toast } from 'sonner'; // Importing sonner toast
 
 const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
-
-
   const [isPanelVisible, setIsPanelVisible] = useState(false);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [testPath, setTestPath] = useState(null);
 
   const togglePanel = () => {
     setIsPanelVisible(!isPanelVisible);
@@ -26,7 +25,7 @@ const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
     setIsDfa(newValue); // Update the state with the new value (true or false)
     toast(`${newValue ? 'DFA' : 'NFA'} selected`, {
       style: {
-        backgroundColor: newValue ? '#18a3e9' : '#e08906',
+        backgroundColor: '#22c55e',
         color: 'white',
       },
     });
@@ -59,7 +58,7 @@ const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
         </div>
 
         <div className="mb-4">
-          <TestCase nodes={nodes} edges={edges} isDfa={isDfa}/>
+          <TestCase nodes={nodes} edges={edges} isDfa={isDfa} onTestPath={setTestPath} testPath={testPath}/>
         </div>
 
         <div className="mb-4 mt-4">

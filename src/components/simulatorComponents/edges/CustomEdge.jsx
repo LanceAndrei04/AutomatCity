@@ -1,5 +1,5 @@
 import React from 'react';
-import { getBezierPath } from 'react-flow-renderer';
+import { getBezierPath, BaseEdge } from '@xyflow/react';
 
 const CustomEdge = ({
   id,
@@ -10,9 +10,10 @@ const CustomEdge = ({
   sourcePosition,
   targetPosition,
   style = {},
+  markerEnd,
   data,
+  label
 }) => {
-  // Generate the edge path using react-flow's utility
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
@@ -24,48 +25,63 @@ const CustomEdge = ({
 
   return (
     <>
-      {/* Edge Path */}
-      <path
+      <BaseEdge
         id={id}
-        d={edgePath}
+        path={edgePath}
         style={{
           ...style,
-          stroke: 'blue', // Edge color
+          stroke: '#000000',
           strokeWidth: 2,
         }}
-        fill="none"
-        markerEnd="url(#blue-arrowhead)"
+        markerEnd="url(#black-arrow)"
       />
 
       {/* Edge Label */}
       {data?.label && (
-        <text
-          x={labelX}
-          y={labelY}
-          style={{
-            fontSize: '14px',
-            fill: 'blue', // Label color
-            textAnchor: 'middle',
-            dominantBaseline: 'middle',
-            pointerEvents: 'none', // Ensure label doesn't interfere with edge interactions
-          }}
-        >
-          {data.label}
-        </text>
+        <g>
+          {/* White background for label */}
+          <rect
+            x={labelX - 12}
+            y={labelY - 10}
+            width="24"
+            height="20"
+            fill="white"
+            rx="4"
+          />
+          {/* Label text */}
+          <text
+            x={labelX}
+            y={labelY}
+            style={{
+              fontSize: '14px',
+              fill: '#000000',
+              fontWeight: 500,
+              textAnchor: 'middle',
+              dominantBaseline: 'central',
+              pointerEvents: 'none',
+            }}
+          >
+            {data.label}
+          </text>
+        </g>
       )}
 
-      {/* Arrowhead Marker */}
+      {/* Arrow Marker Definition */}
       <defs>
         <marker
-          id="blue-arrowhead"
-          markerWidth="10"
-          markerHeight="10"
-          refX="10"
+          id="black-arrow"
+          viewBox="0 0 10 10"
+          markerWidth="5"
+          markerHeight="5"
+          refX="7"
           refY="5"
-          orient="auto"
-          markerUnits="strokeWidth"
+          orient="auto-start-reverse"
         >
-          <polygon points="0 0, 10 5, 0 10" fill="blue" />
+          <path
+            d="M 0 0 L 10 5 L 0 10 z"
+            fill="#000000"
+            strokeWidth="0"
+          />
         </marker>
       </defs>
     </>

@@ -14,11 +14,11 @@ const NodePopup = ({ nodeState, onAddNode, onClose }) => {
   const handleAddNode = () => {
     if (!label) {
         toast.error('Node name cannot be empty!', {
-            style: { backgroundColor: '#ed1c24', color: 'white' }, 
+            style: { backgroundColor: '#ef4444', color: 'white' }, 
           });
         } else {
             toast.success(`State ${label} added!`, {
-                style: { backgroundColor: '#4CAF50', color: 'white' }, 
+                style: { backgroundColor: '#22c55e', color: 'white' }, 
               });        
       // Call the onAddNode function passed from the parent with state and label
       onAddNode({ state: nodeState, label });
