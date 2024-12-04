@@ -51,18 +51,18 @@ const Team = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 py-20">
-      <div className="max-w-7xl mx-auto px-4">
+    <div className="min-h-screen py-20 relative">
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-blue-800 mb-4">
             Meet Our Team
           </h2>
-          <p className="text-xl text-blue-600">
+          <p className="text-xl text-gray-600">
             The brilliant minds behind AutomatCity
           </p>
         </motion.div>
@@ -94,7 +94,7 @@ const Team = () => {
                 <h3 className="text-xl font-semibold bg-gradient-to-r from-blue-500 to-teal-800 bg-clip-text text-transparent mb-2 text-center">
                   {member.name}
                 </h3>
-                <p className="text-teal-600 font-medium mb-3 text-center">
+                <p className="text-blue-400 font-medium mb-3 text-center">
                   {member.role}
                 </p>
                 <p className="text-gray-600 text-center">
