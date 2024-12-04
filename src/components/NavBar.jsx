@@ -68,7 +68,7 @@ const NavBar = () => {
             <div className="relative flex h-16 items-center justify-between">
               <div className="flex flex-1 items-center justify-between">
                 <div className="flex flex-shrink-0 items-center">
-                  <Link to="/" className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition duration-300">
+                  <Link to="/" className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-600 hover:to-blue-900 transition duration-300">
                     AutomatCity
                   </Link>
                 </div>
@@ -96,7 +96,7 @@ const NavBar = () => {
                             onClick={() => handleNavClick(item)}
                             className={`px-3 py-2 text-sm font-medium rounded-md ${
                               activeItem === item.name
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                                ? 'bg-gradient-to-r from-blue-500 to-teal-500 text-white'
                                 : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
                             } transition duration-300`}
                           >
@@ -108,7 +108,7 @@ const NavBar = () => {
                             onClick={() => handleNavClick(item)}
                             className={`px-3 py-2 text-sm font-medium rounded-md ${
                               activeItem === item.name
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                                ? 'bg-gradient-to-r from-blue-700 to-blue-500 text-white'
                                 : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
                             } transition duration-300`}
                           >

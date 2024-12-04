@@ -227,7 +227,7 @@ const Discussion = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent">
             Automata Theory
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -259,8 +259,8 @@ const Discussion = () => {
         >
           <Link 
             to="/simulator"
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl
-                    font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105
+            className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-800 text-white rounded-xl
+                    font-semibold hover:from-blue-700 hover:to-blue-900 transform hover:scale-105
                     transition duration-200 shadow-lg flex items-center justify-center mx-auto">
             Try the Interactive Simulator
             <ArrowRightIcon className="w-5 h-5 ml-2" />

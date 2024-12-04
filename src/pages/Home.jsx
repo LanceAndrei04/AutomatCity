@@ -46,7 +46,7 @@ const Home = () => {
                 }}
                 style={{
                   display: "inline-block",
-                  backgroundImage: "linear-gradient(90deg, #2563eb, #9333ea, #2563eb)",
+                  backgroundImage: "linear-gradient(90deg, #2563eb, #38bdf8, #2563eb)",
                   backgroundSize: "200% 100%",
                   backgroundClip: "text",
                   WebkitBackgroundClip: "text",
@@ -60,7 +60,7 @@ const Home = () => {
             {/* Animated Car with Road */}
             <div className="relative h-20 mx-auto w-full max-w-3xl overflow-hidden">
               {/* Static Road Line */}
-              <div className="absolute bottom-4 w-full h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded" />
+              <div className="absolute bottom-4 w-full h-1 bg-gradient-to-r from-blue-600 to-teal-600 rounded" />
 
               {/* Car Animation */}
               <motion.div
@@ -123,7 +123,7 @@ const Home = () => {
                   }}
                   className="p-6 rounded-xl backdrop-blur-sm shadow-lg border border-purple-100/20"
                 >
-                  <h3 className="text-xl font-semibold text-purple-600 mb-2">{feature.title}</h3>
+                  <h3 className="text-xl font-semibold text-blue-400 mb-2">{feature.title}</h3>
                   <p className="text-gray-600">{feature.desc}</p>
                 </motion.div>
               ))}
@@ -137,7 +137,7 @@ const Home = () => {
             >
               <Link
                 to="/simulator"
-                className="inline-flex items-center px-8 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-purple-800 text-white font-semibold hover:from-purple-700 hover:to-purple-900 transform hover:scale-105 transition-all duration-100 shadow-lg"
+                className="inline-flex items-center px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-800 text-white font-semibold hover:from-blue-700 hover:to-blue-900 transform hover:scale-105 transition-all duration-100 shadow-lg"
               >
                 Try the Simulator
                 <ArrowRightIcon className="w-5 h-5 ml-2" />

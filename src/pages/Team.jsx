@@ -59,10 +59,10 @@ const Team = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent mb-4">
             Meet Our Team
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-blue-600">
             The brilliant minds behind AutomatCity
           </p>
         </motion.div>
@@ -91,10 +91,10 @@ const Team = () => {
                     className="w-full h-full rounded-full object-cover border-4 border-purple-100"
                   />
                 </div>
-                <h3 className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2 text-center">
+                <h3 className="text-xl font-semibold bg-gradient-to-r from-blue-500 to-teal-800 bg-clip-text text-transparent mb-2 text-center">
                   {member.name}
                 </h3>
-                <p className="text-purple-600 font-medium mb-3 text-center">
+                <p className="text-teal-600 font-medium mb-3 text-center">
                   {member.role}
                 </p>
                 <p className="text-gray-600 text-center">
@@ -124,7 +124,7 @@ const Team = () => {
                   </a>
                 </div>
               </div>
-              <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-purple-50">
+              <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-teal-50">
                 <div className="flex justify-center space-x-4">
                 </div>
               </div>

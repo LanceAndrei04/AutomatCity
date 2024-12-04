@@ -52,9 +52,32 @@ const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
           ToolKit
         </div>
 
-        <div className="flex justify-center neumorphic-btn mb-8">
+        <div className="flex justify-center neumorphic-btn mb-4">
           {/* Pass isDfa and setIsDfa to the ToggleSwitch component */}
           <ToggleSwitch isChecked={isDfa} onChange={handleToggle} />
+        </div>
+
+        {/* State Types Legend */}
+        <div className="bg-white rounded-lg p-2 mb-2 shadow-md">
+          <h3 className="text-sm font-semibold text-gray-700 mb-1">State Types</h3>
+          <div className="flex justify-between items-center gap-x-1 text-xs">
+            <div className="flex items-center space-x-1">
+              <div className="w-3 h-3 rounded-full bg-[#22C55E]"></div>
+              <span className="text-gray-600">Initial</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <div className="w-3 h-3 rounded-full bg-[#3B82F6]"></div>
+              <span className="text-gray-600">Final</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <div className="w-3 h-3 rounded-full bg-[#EF4444]"></div>
+              <span className="text-gray-600">Trap</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <div className="w-3 h-3 rounded-full bg-[#FACC15]"></div>
+              <span className="text-gray-600">Regular</span>
+            </div>
+          </div>
         </div>
 
         <div className="mb-4">
