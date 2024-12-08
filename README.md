@@ -274,14 +274,6 @@ interface AutomatonResponse {
 </h2>
 &nbsp;&nbsp;&nbsp;The server runs on port 3000 by default. Make sure no other service is using this port before starting the development server.
 
-<h2 id="license" style="background-color: rgba(0, 0, 0, 0.1); 
-                           padding: 15px; 
-                           border-radius: 10px; 
-                           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-                           transition: transform 0.3s ease, box-shadow 0.3s ease;">
-    📄 License
-</h2>
-&nbsp;&nbsp;&nbsp;This project is licensed under the MIT License - see the LICENSE file for details.
 
 <h2 id="developers" style="background-color: rgba(0, 0, 0, 0.1); 
                            padding: 15px; 
@@ -312,10 +304,14 @@ interface AutomatonResponse {
   <p style="text-align: justify;">We also acknowledge the open-source libraries and tools that made this project possible.</p>
 </div>
 
-
-
 ---
 
-<div style="text-align: center;">
-    <strong><em>God bless us all!</em></strong>
-</div>
+<h2 id="license" style="background-color: rgba(0, 0, 0, 0.1); 
+                           padding: 15px; 
+                           border-radius: 10px; 
+                           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+                           transition: transform 0.3s ease, box-shadow 0.3s ease;">
+    📄 License
+</h2>
+&nbsp;&nbsp;&nbsp;This project is licensed under the MIT License - see the LICENSE file for details.
+
