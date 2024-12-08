@@ -1,6 +1,6 @@
 const ToggleSwitch = ({ isChecked, onChange }) => {
   const toggle = () => {
-    onChange(!isChecked); // Call onChange with the opposite value
+    onChange(!isChecked); 
   };
 
   return (

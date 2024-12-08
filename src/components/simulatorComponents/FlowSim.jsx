@@ -218,7 +218,6 @@ const FlowSim = ({ isDfa, onGetNodes, onGetEdges, testPath = null }) => {
         return nds;
       }
 
-      // Get the flow container dimensions
       const flowContainer = document.querySelector('.react-flow');
       let centerX = 0;
       let centerY = 0;

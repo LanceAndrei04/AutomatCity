@@ -9,7 +9,6 @@ const Home = () => {
     <div className="min-h-screen relative overflow-hidden">
       {/* City Background with Gradient */}
       <div className="fixed inset-0">
-        {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-60"
           style={{
@@ -57,7 +56,7 @@ const Home = () => {
               </motion.span>
             </motion.h1>
 
-            {/* Animated Car with Road */}
+            {/* Animated Car */}
             <div className="relative h-20 mx-auto w-full max-w-3xl overflow-hidden">
               {/* Static Road Line */}
               <div className="absolute bottom-4 w-full h-1 bg-gradient-to-r from-blue-600 to-teal-600 rounded" />
@@ -86,7 +85,7 @@ const Home = () => {
                   />
                 </svg>
                 
-                {/* Motion trail effect */}
+                {/* trail effect */}
                 <motion.div
                   className="absolute right-0 h-0.5 w-32 bg-gradient-to-r from-blue-600/50 to-transparent"
                   style={{ top: '50%' }}
@@ -129,7 +128,7 @@ const Home = () => {
               ))}
             </div>
 
-            {/* CTA Button */}
+            {/* Simulator Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

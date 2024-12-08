@@ -35,14 +35,13 @@ const NavBar = () => {
         }
       }
 
-      // If we're at the top of the page, set Home as active
       if (window.scrollY < 100) {
         setActiveItem('Home');
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
+    handleScroll(); 
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { toast } from 'sonner';
 
 const EdgePopup = ({ edge, onUpdateEdgeLabel, onClose }) => {
-  const [label, setLabel] = useState(edge?.label || ''); // Default to current edge label
+  const [label, setLabel] = useState(edge?.label || ''); 
 
   const handleInputChange = (e) => {
     setLabel(e.target.value); // Update label as the user types
@@ -18,7 +18,7 @@ const EdgePopup = ({ edge, onUpdateEdgeLabel, onClose }) => {
       toast.success(`Label updated to "${label}"`, {
         style: { backgroundColor: '#22c55e', color: 'white' },
       });
-      onClose(); // Close the popup after updating
+      onClose(); 
     }
   };
 
@@ -47,7 +47,7 @@ const EdgePopup = ({ edge, onUpdateEdgeLabel, onClose }) => {
           {/* Button to update the edge label */}
           <div className="flex justify-end">
             <button
-              onClick={handleUpdateLabel} // Use handleUpdateLabel function on click
+              onClick={handleUpdateLabel} 
               className="btn btn-primary px-8 py-2 text-white bg-blue-400 hover:bg-blue-600 rounded-lg"
             >
               Update Label

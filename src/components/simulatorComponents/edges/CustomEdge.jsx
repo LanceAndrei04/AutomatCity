@@ -39,7 +39,6 @@ const CustomEdge = ({
       {/* Edge Label */}
       {data?.label && (
         <g>
-          {/* White background for label */}
           <rect
             x={labelX - 12}
             y={labelY - 10}

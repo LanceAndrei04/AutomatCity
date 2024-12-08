@@ -14,7 +14,7 @@ const CustomNodes = ({ id, data, selected }) => {
       fontWeight: 'bold',
       position: 'relative',
       boxShadow: '8px 8px 15px rgba(0, 0, 0, 0.1), -8px -8px 15px rgba(255, 255, 255, 0.7)',
-      border: selected ? '2px solid #010101' : 'none', // Apply border if selected
+      border: selected ? '2px solid #010101' : 'none', 
     };
 
     switch (state) {
@@ -27,7 +27,7 @@ const CustomNodes = ({ id, data, selected }) => {
       case 'regular':
         return { ...baseStyle, backgroundColor: '#FACC15' }; // Yellow
       default:
-        return { ...baseStyle, backgroundColor: '#6B7280' }; // Default Gray
+        return { ...baseStyle, backgroundColor: '#6B7280' }; // Default 
     }
   };
 

@@ -5,7 +5,7 @@ import TestCase from './TestCase';
 import ToggleSwitch from './ToggleSwitch';
 import TupleGenerator from './TupleGenerator';
 import Popup from '../Popup';
-import { toast } from 'sonner'; // Importing sonner toast
+import { toast } from 'sonner'; 
 
 const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
   const [isPanelVisible, setIsPanelVisible] = useState(false);
@@ -22,7 +22,7 @@ const Panel = ({ onTupleButtonClick, isDfa, setIsDfa, nodes, edges }) => {
 
   // Toggle DFA/NFA and show a toast message
   const handleToggle = (newValue) => {
-    setIsDfa(newValue); // Update the state with the new value (true or false)
+    setIsDfa(newValue); 
     toast(`${newValue ? 'DFA' : 'NFA'} selected`, {
       style: {
         backgroundColor: '#22c55e',

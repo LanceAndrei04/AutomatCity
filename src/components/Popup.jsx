@@ -7,7 +7,7 @@ const Popup = ({ isVisible, onClose, popupType, data, addNode, nodeData}) => {
   if (!isVisible) return null;
 
   const handleInputChange = (e) => {
-    setNodeName(e.target.value); // Update the node name as the user types
+    setNodeName(e.target.value); 
   };
 
   const handleSubmit = () => {
@@ -25,17 +25,14 @@ const Popup = ({ isVisible, onClose, popupType, data, addNode, nodeData}) => {
       // Use the addNode function to add the new node
       addNode({ 
         name: nodeName, 
-        color: nodeData.color || 'bg-orange-500' // Use default color if not provided
+        color: nodeData.color || 'bg-orange-500' 
       });
   
-      onClose(); // Close the popup after submitting
+      onClose(); 
     }
   };
-  
 
-
-
-  // Function to render sections and table data in a structured layout
+  // Render sections and table data in a structured layout
   const renderTupleContent = (sections, tableData) => {
     return (
       <div>

@@ -8,8 +8,8 @@ export const sections = [
   ];
   
   export const tableData = [
-    ['state', 'A', 'B'],  // Header row
-    ['0', '1', '0'],      // Row for State 0
-    ['1', '0', '1']       // Row for State 1
+    ['state', 'A', 'B'],  
+    ['0', '1', '0'],      
+    ['1', '0', '1']       
   ];
   

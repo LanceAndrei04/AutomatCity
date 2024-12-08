@@ -18,7 +18,6 @@ const App = () => {
           path="/home" 
           element={
             <>
-              
               <NavBar /> 
               <MainPage />
             </>

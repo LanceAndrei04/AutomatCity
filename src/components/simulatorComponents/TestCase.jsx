@@ -13,15 +13,15 @@ import neutralFace from '../assetJson/nuetralFace.json';
 const TestCase = ({isDfa, nodes, edges}) => {
   const [inputText, setInputText] = useState('');
   const [sentText, setSentText] = useState('');
-  const [animationData, setAnimationData] = useState(neutralFace); // Default neutral face
-  const [isTyping, setIsTyping] = useState(false); // Track if the user is typing
+  const [animationData, setAnimationData] = useState(neutralFace); 
+  const [isTyping, setIsTyping] = useState(false); 
   const [testPath, setTestPath] = useState(null);
-  const lottieRef = useRef(null); // Reference to Lottie instance
+  const lottieRef = useRef(null); 
 
   // Handle input change
   const handleInputChange = (e) => {
     setInputText(e.target.value);
-    setIsTyping(true);  // Set typing status to true
+    setIsTyping(true);  
   };
 
   // Send message and play the Lottie animation
@@ -68,7 +68,7 @@ const TestCase = ({isDfa, nodes, edges}) => {
 
       setSentText(inputText);  // Set the sent message text
       setInputText('');  // Clear input text
-      setIsTyping(false);  // Stop typing when the message is sent
+      setIsTyping(false);  
 
     }
     

@@ -58,18 +58,18 @@ nav {;
 
 
 
-  @media (max-width: 640px) {
-    .node-container {
-      flex-direction: row;
-    }
-    
-    .node-container button {
-      flex: 1 0 45%; 
-      margin: 5px; 
-    }
+@media (max-width: 640px) {
+  .node-container {
+    flex-direction: row;
   }
+    
+  .node-container button {
+    flex: 1 0 45%; 
+    margin: 5px; 
+  }
+}
   
-
+/* text chnage color */
 
 .glow-green {
     animation: glow-green 1s ease-in-out forwards;
@@ -106,45 +106,46 @@ nav {;
         opacity: 0.5; 
     }
 }
+
 @media (max-width: 20px) {
     .toggle-menu {
       display: block; /* Show the toggle button */
     }
-  }
+}
   
-  @media (min-width: 21px) {
+ @media (min-width: 21px) {
     .toggle-menu {
       display: none; /* Hide the toggle button */
     }
+}
+  
+.neumorphic-node {
+  background: #e0e5ec; 
+  border-radius: 12px;  
+  box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), 
+                -8px -8px 15px rgba(255, 255, 255, 0.7); 
+  padding: 10px;
+  text-align: center;
+  color: #333;
+}
+  
+.node {
+  width: 100px;
+  height: 100px;
+  background: #e0e0e0;
+  border-radius: 50%;
+  box-shadow: 7px 7px 15px #bebebe, -7px -7px 15px #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: #333;
+  position: absolute;
+  cursor: grab;
   }
   
-  .neumorphic-node {
-    background: #e0e5ec; /* Light gray background */
-    border-radius: 12px;  /* Rounded corners */
-    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.1), 
-                -8px -8px 15px rgba(255, 255, 255, 0.7); /* Neumorphic shadow */
-    padding: 10px;
-    text-align: center;
-    color: #333;
-  }
-  
-  .node {
-    width: 100px;
-    height: 100px;
-    background: #e0e0e0;
-    border-radius: 50%;
-    box-shadow: 7px 7px 15px #bebebe, -7px -7px 15px #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    color: #333;
-    position: absolute;
-    cursor: grab;
-  }
-  
-  .edge-label {
-    font-size: 12px;
-    fill: #555;
-  }
+.edge-label {
+  font-size: 12px;
+  fill: #555;
+}
   

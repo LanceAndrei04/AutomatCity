@@ -22,7 +22,7 @@ const NodePopup = ({ nodeState, onAddNode, onClose }) => {
               });        
       // Call the onAddNode function passed from the parent with state and label
       onAddNode({ state: nodeState, label });
-      onClose(); // Close the popup after adding the node
+      onClose(); 
     }
   };
 
@@ -44,8 +44,8 @@ const NodePopup = ({ nodeState, onAddNode, onClose }) => {
           {/* Input for node name */}
           <input
             type="text"
-            value={label} // Bind the value to the label state
-            onChange={handleInputChange} // Update label on change
+            value={label} 
+            onChange={handleInputChange} 
             className="border border-gray-300 p-2 rounded w-full mb-4"
             placeholder="Enter node name"
           />
@@ -53,7 +53,7 @@ const NodePopup = ({ nodeState, onAddNode, onClose }) => {
           {/* Button to add node */}
           <div className="flex justify-end">
             <button
-              onClick={handleAddNode} // Use handleAddNode function on click
+              onClick={handleAddNode} 
               className="btn btn-primary px-8 py-2 text-white bg-blue-400 hover:bg-blue-600 rounded-lg"
             >
               Add Node
