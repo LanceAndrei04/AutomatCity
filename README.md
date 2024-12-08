@@ -274,6 +274,7 @@ interface AutomatonResponse {
 </h2>
 &nbsp;&nbsp;&nbsp;The server runs on port 3000 by default. Make sure no other service is using this port before starting the development server.
 
+---
 
 <h2 id="developers" style="background-color: rgba(0, 0, 0, 0.1); 
                            padding: 15px; 
