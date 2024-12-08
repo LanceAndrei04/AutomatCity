@@ -3,7 +3,7 @@
             padding: 15px; 
             border-radius: 15px; 
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
-  <img src="src/assets/automat_bg.png" alt="AutoMat City Logo" width="1800" style="border-radius: 10px;"/>
+  <img src="readme_assets/automat_bg.png" alt="AutoMat City Logo" width="1800" style="border-radius: 10px;"/>
 </div>
 
 
@@ -22,19 +22,20 @@
     📚 Table of Contents
 </h2>
 
-1. [Introduction](#introduction)  
-2. [Features](#features)  
+1. [Introduction](#introduction)
+2. [Preview](#preview) 
+3. [Features](#features)  
    - [Discussion and Learning Modules](#discussion-and-learning-modules)  
    - [Automata Simulator](#automata-simulator)  
    - [User-Friendly Interface](#user-friendly-interface)  
-3. [Technologies Used](#technologies-used)
-4. [Branches](#branches)
-5. [Installation and Setup](#installation)  
+4. [Technologies Used](#technologies-used)
+5. [Branches](#branches)
+6. [Installation and Setup](#installation)  
     - [Clone the Repository](#clone)
     - [Front End](#frontend1)
     - [Back End](#backend1)
-6. [Developers](#developers)  
-7. [Acknowledgments](#acknowledgments)  
+7. [Developers](#developers)  
+8. [Acknowledgments](#acknowledgments)  
 
 ---
 
@@ -49,6 +50,21 @@
   <p><strong>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Automat City: Interactive Automata Theory</strong> is an interactive, web-based learning platform designed to enhance the understanding of Automata Theory. This platform focuses on core concepts such as state machines, Non-deterministic Finite Automata (NFAs), and Deterministic Finite Automata (DFAs). With built-in simulators, users can test and explore NFA and DFA cases, while also generating 5-tuples for better understanding of these computational models. The application aims to provide hands-on learning experiences, helping users to practice and apply their knowledge of computational theory through interactive simulations. Whether you are a student or enthusiast, AutoMat City offers a dynamic and engaging way to master Automata Theory.</p>
 </div>
 
+
+---
+<h2 id="preview" style="background-color: rgba(0, 0, 0, 0.1); 
+                           padding: 15px; 
+                           border-radius: 10px; 
+                           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+                           transition: transform 0.3s ease, box-shadow 0.3s ease;">
+    💻 Preview
+</h2>
+
+### Desktop View
+ <img src="readme_assets/preview_ac.png" alt="AutoMat City preview" width="100%" height="auto" style="border-radius: 10px;"/>
+
+### Mobile View
+<img src="readme_assets/mobile_responsive.gif" alt="AutoMat City preview" width="500px" height="auto" style="border-radius: 10px;"/>
 
 ---
 
@@ -75,15 +91,15 @@
       <li><strong>Regular Nodes</strong></li>
       <li><strong>Final State Nodes</strong></li>
     </ul>
-            <img src="src/assets/gif1.gif" alt="Test Cases GIF" />
+            <img src="readme_assets/gif1.gif" alt="Test Cases GIF" />
   </li>
   <li><strong>Test Cases:</strong> Users can test input strings by entering them into the system. The simulator provides real-time results and visualizes the path of the computation. <br>
-    <img src="src/assets/gif2.gif" alt="Test Cases GIF" />
+    <img src="readme_assets/gif2.gif" alt="Test Cases GIF" />
 </li>
             
   <li><strong>Instant Input Validation:</strong> Check the correctness of input strings instantly to validate automata behavior.</li>
   <li><strong>Generate 5-Tuples:</strong> Automatically generates the formal **5-tuple** representation of the NFA or DFA based on the constructed automata.
-              <img src="src/assets/gif3.gif" alt="Test Cases GIF" />
+              <img src="readme_assets/gif3.gif" alt="Test Cases GIF" />
   </li>
 </ul>
 
@@ -236,16 +252,6 @@ interface AutomatonResponse {
  ```powershell
     npm run dev
 ```
-  ### React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-    - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-
-    - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
 
 >### <a id="backend1"></a>Backend
 &nbsp;&nbsp;&nbsp;First, install the dependencies for the backend by running the following command in the terminal:
