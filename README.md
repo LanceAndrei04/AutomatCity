@@ -23,13 +23,13 @@
 </h2>
 
 1. [Introduction](#introduction)
-2. [Preview](#preview) 
-3. [Features](#features)  
+2. [Preview](#preview)
+3. [Branches](#branches)
+4. [Features](#features)  
    - [Discussion and Learning Modules](#discussion-and-learning-modules)  
    - [Automata Simulator](#automata-simulator)  
    - [User-Friendly Interface](#user-friendly-interface)  
-4. [Technologies Used](#technologies-used)
-5. [Branches](#branches)
+5. [Technologies Used](#technologies-used)
 6. [Installation and Setup](#installation)  
     - [Clone the Repository](#clone)
     - [Front End](#frontend1)
@@ -65,6 +65,32 @@
 
 ### Mobile View
 <img src="readme_assets/mobile_responsive.gif" alt="AutoMat City preview" width="500px" height="auto" style="border-radius: 10px;"/>
+
+---
+
+<h2 id="branches" style="background-color: rgba(0, 0, 0, 0.1); 
+                        padding: 15px; 
+                        border-radius: 10px; 
+                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;">
+    🌳 Branches
+</h2>
+
+<div style="padding: 0px;">
+    <h3>🎨 Frontend</h3>
+    <a href="https://github.com/LanceAndrei04/AutomatCity/tree/main" target="Main">
+            main
+    </a>
+
+> This branch contains all the code related to the frontend of the project, including the user interface, styling, and client-side functionality. It uses React and Tailwind CSS to provide a dynamic and responsive design.
+
+<h3>⚙️ Backend</h3>
+    <a href="https://github.com/LanceAndrei04/AutomatCity/tree/backend" target="BackEnd">
+        backend
+    </a>
+
+> Handles the server-side logic and database interactions, including API development and data processing to support frontend functionalities.
+</div>
 
 ---
 
@@ -119,7 +145,7 @@
                            transition: transform 0.3s ease, box-shadow 0.3s ease;">
     🖥️Technologies Used
 
-### Frontend:
+### 🎨 Frontend
 - **Languages:**
   - **HTML5**: Used for structuring web pages and content.
   - **CSS3**: Used for styling and layout of the web application.
@@ -131,7 +157,7 @@
   - **Vite**: A modern build tool that offers fast, optimized development and build processes for the frontend application.
 
 
-### Backend:
+### ⚙️ Backend
 - **Languages:**
   - **JavaScript**: Used throughout the backend for consistent code and full-stack JavaScript development.
 
@@ -198,31 +224,6 @@ interface AutomatonResponse {
     acceptStates: string[]; // List of accepting/final states
 }
 ```
-<h2 id="branches" style="background-color: rgba(0, 0, 0, 0.1); 
-                        padding: 15px; 
-                        border-radius: 10px; 
-                        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-                        transition: transform 0.3s ease, box-shadow 0.3s ease;">
-    🌳 Branches
-</h2>
-
-<div style="padding: 0px;">
-    <h3>Frontend</h3>
-    <a href="https://github.com/LanceAndrei04/AutomatCity/tree/main" target="Main">
-        Frontend Branch (GitHub Link)
-    </a>
-
-> This branch contains all the code related to the frontend of the project, including the user interface, styling, and client-side functionality. It uses React and Tailwind CSS to provide a dynamic and responsive design.
-
-<h3>Backend</h3>
-    <a href="https://github.com/LanceAndrei04/AutomatCity/tree/backend" target="BackEnd">
-        Backend Branch (GitHub Link)
-    </a>
-
-> Handles the server-side logic and database interactions, including API development and data processing to support frontend functionalities.
-</div>
-
-
 ---
 <h2 id="installation" style="background-color: rgba(0, 0, 0, 0.1); 
                              padding: 15px; 
@@ -288,24 +289,14 @@ interface AutomatonResponse {
                            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
                            transition: transform 0.3s ease, box-shadow 0.3s ease;">
     👥 Developers
+</h2>
 
+| **Name**                  | **Role**          | **GitHub**                                                       | **Other Contacts**                                                                 |
+|---------------------------|-------------------|------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| Espina, Lance Andrei R.| Frontend Developer | [LanceAndrei04](https://github.com/LanceAndrei04)                | [Lance Andrei](https://www.facebook.com/lance.espina.30) |
+| Caguicla, Fhil Joshua P. | Backend Developer        | [HusPhil](https://github.com/HusPhil)                            | [Fhil Joshua Caguicla](https://www.facebook.com/kukuku.caguicla)                             |
+| Evangelista, Aeron M.  | Project Manager           | [AeronEvangelista](https://github.com/AeronEvangelista)          | [Aeron Evangelista](https://www.facebook.com/mr.poginglamig)|
 
-### **Frontend Developer**  
-- **Espina, Lance Andrei R.**  
-  - [GitHub](https://github.com/LanceAndrei04)  
-  - [Facebook](https://www.facebook.com/lance.espina.30)  
-  - [Instagram](https://www.instagram.com/calen_ndr)  
-
-### **Backend Developer**  
-- **Caguicla, Fhil Joshua P.**  
-  - [GitHub](https://github.com/HusPhil)  
-  - [Facebook](https://facebook.com/username)  
-
-### **Project Manager/Fullstack Developer**  
-- **Evangelista, Aeron M.**  
-  - [GitHub](https://github.com/AeronEvangelista)  
-  - [Facebook](https://www.facebook.com/mr.poginglamig)  
-  - [Instagram](https://www.instagram.com/evangelistaaeron/) 
 
 ---
 
